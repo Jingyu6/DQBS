@@ -104,5 +104,23 @@ class BacktrackDQN(DQN):
             self.optimizer.step()        
 
 
+class MultiBatchDQN(BacktrackDQN):
+    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+        super(MultiBatchDQN, self).__init__(state_dim, action_dim, sample_size, lr, gamma)
+
+    def update(self):
+        if len(self.memory) < (self.sample_size * self.backtrack_steps):
+            return
+
+        for i in range(self.backtrack_steps):
+            states, actions, rewards, next_states, dones, indices = self.memory.sample()
+            q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
+            q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
+            q_predict = self.q_func.forward(states).gather(1, actions)
+            loss = F.mse_loss(q_targets, q_predict)
+
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()            
 
 

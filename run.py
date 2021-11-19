@@ -3,15 +3,15 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-from algorithm.q_learning import DQN, BacktrackDQN
+from algorithm.q_learning import DQN, BacktrackDQN, MultiBatchDQN
 
-ALGO_NAMES = ['DQN', 'BacktrackDQN']
+ALGO_NAMES = ['DQN', 'MultiBatchDQN', 'BacktrackDQN']
 ENV_NAME = 'CartPole-v0'
 LOG_INTERVAL = 10
 SAMPLE_SIZE = 64
 LR = 2e-3
 MAX_HORIZON = 10000
-NUM_EPOCHS = 300
+NUM_EPOCHS = 200
 SEED_LIST = [227, 222, 1003, 1123]
 
 env = gym.make(ENV_NAME)
@@ -33,8 +33,12 @@ def main():
 
             if algo_name == 'BacktrackDQN':
                 model = BacktrackDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
-            else:
+            elif algo_name == 'DQN':
                 model = DQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+            elif algo_name == 'MultiBatchDQN':
+                model = MultiBatchDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+            else:
+                raise NotImplementedError
 
             running_reward = 0
             for i_episode in range(NUM_EPOCHS):
