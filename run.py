@@ -3,9 +3,9 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-from algorithm.q_learning import DQN, BacktrackDQN, MultiBatchDQN
+from algorithm.q_learning import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
-ALGO_NAMES = ['DQN', 'MultiBatchDQN', 'BacktrackDQN']
+ALGO_NAMES = ['DQN', 'MultiBatchDQN', 'BacktrackDQN', 'BacktrackSarsaDQN']
 ENV_NAME = 'CartPole-v0'
 LOG_INTERVAL = 10
 SAMPLE_SIZE = 64
@@ -37,6 +37,8 @@ def main():
                 model = DQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
             elif algo_name == 'MultiBatchDQN':
                 model = MultiBatchDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+            elif algo_name == 'BacktrackSarsaDQN':
+                model = BacktrackSarsaDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
             else:
                 raise NotImplementedError
 

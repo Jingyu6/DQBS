@@ -52,22 +52,73 @@ class DQN:
         self.eps = max(self.eps_end, self.eps_decay * self.eps)
         self._update_target_q_func()
 
+    def _q_learning_loss(self, states, actions, rewards, next_states, dones):
+        q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
+        q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
+        q_predict = self.q_func.forward(states).gather(1, actions)
+        loss = F.mse_loss(q_targets, q_predict)
+        return loss
+
+    def _sarsa_loss(self, states, actions, rewards, next_states, next_actions):
+        next_q_predict = self.q_func.forward(next_states).gather(1, next_actions).detach()
+        sarsa_target = rewards + (self.gamma * next_q_predict)
+
+        q_predict = self.q_func.forward(states).gather(1, actions)
+        loss = F.mse_loss(sarsa_target, q_predict)
+        return loss
+
     def update(self):
         if len(self.memory) < self.sample_size:
             return
 
         states, actions, rewards, next_states, dones, _ = self.memory.sample()
-
-        q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
-        q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
-
-        q_predict = self.q_func.forward(states).gather(1, actions)
+        loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
 
         self.optimizer.zero_grad()
-        loss = F.mse_loss(q_targets, q_predict)
         loss.backward()
         self.optimizer.step()
 
+
+class BacktrackSarsaDQN(DQN):
+    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+        self.backtrack_steps = 3
+        super(BacktrackSarsaDQN, self).__init__(state_dim, action_dim, sample_size // self.backtrack_steps, lr, gamma)
+
+    def update(self):
+        if len(self.memory) < (self.sample_size * self.backtrack_steps):
+            return
+
+        starting_indices = None
+
+        for i in range(self.backtrack_steps):
+            if i == 0:
+                states, actions, rewards, next_states, dones, indices = self.memory.sample()
+                loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+            else:
+                states, actions, rewards, next_states, _, next_actions, indices = self.memory.sample(starting_indices)
+                loss = self._sarsa_loss(states, actions, rewards, next_states, next_actions)
+
+            starting_indices = indices
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()                  
+
+class MultiBatchDQN(DQN):
+    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+        self.backtrack_steps = 3
+        super(MultiBatchDQN, self).__init__(state_dim, action_dim, sample_size // self.backtrack_steps, lr, gamma)
+
+    def update(self):
+        if len(self.memory) < (self.sample_size * self.backtrack_steps):
+            return
+
+        for i in range(self.backtrack_steps):
+            states, actions, rewards, next_states, dones, _ = self.memory.sample()
+            loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()            
 
 class BacktrackDQN(DQN):
     def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
@@ -81,46 +132,10 @@ class BacktrackDQN(DQN):
         starting_indices = None
 
         for i in range(self.backtrack_steps):
-            if i == 0:
-                states, actions, rewards, next_states, dones, indices = self.memory.sample()
-                starting_indices = indices
+            states, actions, rewards, next_states, dones, indices = self.memory.sample(starting_indices)
+            loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
 
-                q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
-                q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
-                q_predict = self.q_func.forward(states).gather(1, actions)
-                loss = F.mse_loss(q_targets, q_predict)
-            else:
-                states, actions, rewards, next_states, _, next_actions, indices = self.memory.sample(starting_indices)
-                starting_indices = indices
-
-                next_q_predict = self.q_func.forward(next_states).gather(1, next_actions).detach()
-                sarsa_target = rewards + (self.gamma * next_q_predict)
-
-                q_predict = self.q_func.forward(states).gather(1, actions)
-                loss = F.mse_loss(sarsa_target, q_predict)
-
+            starting_indices = indices
             self.optimizer.zero_grad()
             loss.backward()
-            self.optimizer.step()        
-
-
-class MultiBatchDQN(BacktrackDQN):
-    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
-        super(MultiBatchDQN, self).__init__(state_dim, action_dim, sample_size, lr, gamma)
-
-    def update(self):
-        if len(self.memory) < (self.sample_size * self.backtrack_steps):
-            return
-
-        for i in range(self.backtrack_steps):
-            states, actions, rewards, next_states, dones, indices = self.memory.sample()
-            q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
-            q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
-            q_predict = self.q_func.forward(states).gather(1, actions)
-            loss = F.mse_loss(q_targets, q_predict)
-
-            self.optimizer.zero_grad()
-            loss.backward()
-            self.optimizer.step()            
-
-
+            self.optimizer.step()  
