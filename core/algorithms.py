@@ -1,34 +1,44 @@
+import random
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-import random
 
-from algorithm.models import QFunc
-from algorithm.replay_buffer import ReplayBuffer
-from collections import namedtuple
+from core.models import FCN
+from core.replay_buffer import ReplayBuffer
 
 
 class DQN:
-    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+    def __init__(
+        self, 
+        state_dim, 
+        action_dim, 
+        lr=1e-3,
+        gamma=0.99,
+        buffer_size=1e5,
+        sample_size=64,
+        eps_start=0.8,
+        eps_end=0.05,
+        eps_decay=0.95,
+        **kwargs
+    ):
         self.gamma = gamma
-
         self.action_dim = action_dim
 
-        self.q_func = QFunc(state_dim, action_dim)
-        self.target_q_func = QFunc(state_dim, action_dim)
+        self.q_func = FCN(state_dim, action_dim)
+        self.target_q_func = FCN(state_dim, action_dim)
         self.target_q_func.eval()
         self._update_target_q_func()
         self.optimizer = optim.Adam(self.q_func.parameters(), lr=lr)
 
         """ Hyperparameters """
-        self.buffer_size = int(1e5)
+        self.buffer_size = int(buffer_size)
         self.sample_size = sample_size
 
-        self.eps_start = 1.0
+        self.eps_start = eps_start
+        self.eps_end = eps_end
+        self.eps_decay = eps_decay
         self.eps = self.eps_start
-        self.eps_end = 0.01
-        self.eps_decay = 0.995
 
         self.memory = ReplayBuffer(state_dim, self.buffer_size, self.sample_size)
 
@@ -80,9 +90,33 @@ class DQN:
 
 
 class BacktrackSarsaDQN(DQN):
-    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
-        self.backtrack_steps = 3
-        super(BacktrackSarsaDQN, self).__init__(state_dim, action_dim, sample_size // self.backtrack_steps, lr, gamma)
+    def __init__(
+        self,
+        state_dim, 
+        action_dim, 
+        lr=1e-3,
+        gamma=0.99,
+        buffer_size=1e5,
+        sample_size=64,
+        eps_start=0.8,
+        eps_end=0.05,
+        eps_decay=0.95,
+        backtrack_steps=3,
+        **kwargs
+    ):
+        self.backtrack_steps = backtrack_steps
+        super(BacktrackSarsaDQN, self).__init__(
+            state_dim,
+            action_dim, 
+            lr,
+            gamma,
+            buffer_size,
+            sample_size // self.backtrack_steps,
+            eps_start,
+            eps_end,
+            eps_decay,
+            **kwargs
+        )
 
     def update(self):
         if len(self.memory) < (self.sample_size * self.backtrack_steps):
@@ -104,9 +138,32 @@ class BacktrackSarsaDQN(DQN):
             self.optimizer.step()                  
 
 class MultiBatchDQN(DQN):
-    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+    def __init__(
+        self,
+        state_dim, 
+        action_dim, 
+        lr=1e-3,
+        gamma=0.99,
+        buffer_size=1e5,
+        sample_size=64,
+        eps_start=0.8,
+        eps_end=0.05,
+        eps_decay=0.95,
+        backtrack_steps=3,
+        **kwargs
+    ):
         self.backtrack_steps = 3
-        super(MultiBatchDQN, self).__init__(state_dim, action_dim, sample_size // self.backtrack_steps, lr, gamma)
+        super(MultiBatchDQN, self).__init__(
+            state_dim,
+            action_dim, 
+            lr,
+            gamma,
+            buffer_size,
+            sample_size // self.backtrack_steps,
+            eps_start,
+            eps_end,
+            eps_decay
+        )
 
     def update(self):
         if len(self.memory) < (self.sample_size * self.backtrack_steps):
@@ -121,9 +178,33 @@ class MultiBatchDQN(DQN):
             self.optimizer.step()            
 
 class BacktrackDQN(DQN):
-    def __init__(self, state_dim, action_dim, sample_size=64, lr=1e-3, gamma=0.99):
+    def __init__(
+        self,
+        state_dim, 
+        action_dim, 
+        lr=1e-3,
+        gamma=0.99,
+        buffer_size=1e5,
+        sample_size=64,
+        eps_start=0.8,
+        eps_end=0.05,
+        eps_decay=0.95,
+        backtrack_steps=3,
+        **kwargs
+    ):
         self.backtrack_steps = 3
-        super(BacktrackDQN, self).__init__(state_dim, action_dim, sample_size // self.backtrack_steps, lr, gamma)
+        super(BacktrackDQN, self).__init__(
+            state_dim,
+            action_dim, 
+            lr,
+            gamma,
+            buffer_size,
+            sample_size // self.backtrack_steps,
+            eps_start,
+            eps_end,
+            eps_decay,
+            **kwargs
+        )
 
     def update(self):
         if len(self.memory) < (self.sample_size * self.backtrack_steps):
@@ -132,7 +213,10 @@ class BacktrackDQN(DQN):
         starting_indices = None
 
         for i in range(self.backtrack_steps):
-            states, actions, rewards, next_states, dones, indices = self.memory.sample(starting_indices)
+            if starting_indices is None:
+                states, actions, rewards, next_states, dones, indices = self.memory.sample(None)
+            else:
+                states, actions, rewards, next_states, dones, _, indices = self.memory.sample(starting_indices)
             loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
 
             starting_indices = indices

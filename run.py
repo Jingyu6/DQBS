@@ -3,13 +3,23 @@ import torch
 import numpy as np
 import matplotlib.pyplot as plt
 
-from algorithm.q_learning import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
+from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
-ALGO_NAMES = ['DQN', 'MultiBatchDQN', 'BacktrackDQN', 'BacktrackSarsaDQN']
+ALGO_NAMES = ['BacktrackSarsaDQN', 'DQN', 'MultiBatchDQN', 'BacktrackDQN']
 ENV_NAME = 'CartPole-v0'
 LOG_INTERVAL = 10
-SAMPLE_SIZE = 64
-LR = 2e-3
+
+PARAMS = dict(
+    lr=2e-3,
+    gamma=0.99,
+    buffer_size=1e5,
+    sample_size=64,
+    eps_start=0.8,
+    eps_end=0.05,
+    eps_decay=0.95,
+    backtrack_steps=3
+)
+
 MAX_HORIZON = 10000
 NUM_EPOCHS = 200
 SEED_LIST = [227, 222, 1003, 1123]
@@ -31,14 +41,14 @@ def main():
             print('Env Name: %s | Seed: %d | STATE_DIM: %d | ACTION_DIM: %d | Algo: %s '
                   % (ENV_NAME, seed, STATE_DIM, ACTION_DIM, algo_name))
 
-            if algo_name == 'BacktrackDQN':
-                model = BacktrackDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
-            elif algo_name == 'DQN':
-                model = DQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+            if algo_name == 'DQN':
+                model = DQN(STATE_DIM, ACTION_DIM, **PARAMS)
+            elif algo_name == 'BacktrackDQN':
+                model = BacktrackDQN(STATE_DIM, ACTION_DIM, **PARAMS)
             elif algo_name == 'MultiBatchDQN':
-                model = MultiBatchDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+                model = MultiBatchDQN(STATE_DIM, ACTION_DIM, **PARAMS)
             elif algo_name == 'BacktrackSarsaDQN':
-                model = BacktrackSarsaDQN(STATE_DIM, ACTION_DIM, SAMPLE_SIZE, LR)
+                model = BacktrackSarsaDQN(STATE_DIM, ACTION_DIM, **PARAMS)
             else:
                 raise NotImplementedError
 

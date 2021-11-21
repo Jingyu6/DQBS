@@ -1,10 +1,10 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-class QFunc(nn.Module):
+class FCN(nn.Module):
     def __init__(self, state_dim, action_dim):
         """ single action for each state """
-        super(QFunc, self).__init__()
+        super(FCN, self).__init__()
         self.affine1 = nn.Linear(state_dim, 32)
         self.affine2 = nn.Linear(32, 64)
         self.affine3 = nn.Linear(64, action_dim)
