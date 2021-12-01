@@ -42,6 +42,9 @@ class DQN:
 
         self.memory = ReplayBuffer(state_dim, self.buffer_size, self.sample_size)
 
+        """ additional arguments """
+        self.use_double_dqn = kwargs.get('use_double_dqn', False)
+
     def _update_target_q_func(self):
         self.target_q_func.load_state_dict(self.q_func.state_dict())
 
@@ -63,10 +66,25 @@ class DQN:
         self._update_target_q_func()
 
     def _q_learning_loss(self, states, actions, rewards, next_states, dones):
+        if self.use_double_dqn:
+            return self._double_dqn_loss(states, actions, rewards, next_states, dones)
+
         q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
         q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
         q_predict = self.q_func.forward(states).gather(1, actions)
         loss = F.mse_loss(q_targets, q_predict)
+        
+        return loss
+
+    def _double_dqn_loss(self, states, actions, rewards, next_states, dones):
+        next_q_online = self.q_func.forward(next_states)
+        next_q_targets = self.target_q_func.forward(next_states)
+        greedy_next_actions = torch.argmax(next_q_online, dim=-1, keepdim=True).detach()
+
+        q_targets = rewards + (self.gamma * next_q_targets.gather(1, greedy_next_actions) * (1 - dones))
+        q_predict = self.q_func.forward(states).gather(1, actions)
+        loss = F.mse_loss(q_targets, q_predict)
+
         return loss
 
     def _sarsa_loss(self, states, actions, rewards, next_states, next_actions):

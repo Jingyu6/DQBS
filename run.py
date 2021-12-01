@@ -17,7 +17,8 @@ PARAMS = dict(
     eps_start=0.8,
     eps_end=0.05,
     eps_decay=0.95,
-    backtrack_steps=3
+    backtrack_steps=3,
+    use_double_dqn=True
 )
 
 MAX_HORIZON = 10000
