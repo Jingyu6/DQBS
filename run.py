@@ -1,3 +1,5 @@
+import os.path
+
 import gym
 import torch
 import numpy as np
@@ -6,7 +8,7 @@ import matplotlib.pyplot as plt
 from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
 ALGO_NAMES = ['BacktrackSarsaDQN', 'DQN', 'MultiBatchDQN', 'BacktrackDQN']
-ENV_NAME = 'CartPole-v0'
+ENV_NAME = 'CartPole-v0'  # CartPole-v0, Acrobot-v1, MountainCar-v0
 LOG_INTERVAL = 10
 
 PARAMS = dict(
@@ -18,7 +20,9 @@ PARAMS = dict(
     eps_end=0.05,
     eps_decay=0.95,
     backtrack_steps=3,
-    use_double_dqn=True
+    use_double_dqn=True,
+    alpha=0.5,
+    beta=1e-2,
 )
 
 MAX_HORIZON = 10000
@@ -28,6 +32,7 @@ SEED_LIST = [227, 222, 1003, 1123]
 env = gym.make(ENV_NAME)
 STATE_DIM = env.observation_space.shape[0]
 ACTION_DIM = env.action_space.n
+
 
 def main():
     records = {}
@@ -86,7 +91,9 @@ def main():
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
     plt.legend(ALGO_NAMES)
-    plt.show()
+    plt.savefig(os.path.join('result', ENV_NAME + '.png'))
+    # plt.show()
+
 
 if __name__ == '__main__':
     main()
