@@ -45,10 +45,11 @@ class PrioritizedExperienceReplayBuffer:
         if self.current_size == self.buffer_size:
             if priority > self.priority.min():
                 cur_idx = self.priority.argmin()
+            else:
+                return
         else:
             cur_idx = self.current_size
             self.current_size += 1
-
         self.states[cur_idx] = state
         self.actions[cur_idx] = action
         self.rewards[cur_idx] = reward
