@@ -48,12 +48,12 @@ class DQN:
     def _update_target_q_func(self):
         self.target_q_func.load_state_dict(self.q_func.state_dict())
 
-    def select_action(self, state):
+    def select_action(self, state, greedy=False):
         state = torch.from_numpy(state).float().unsqueeze(0)        
         with torch.no_grad():
             action_values = self.q_func.forward(state)
 
-        if random.random() > self.eps:
+        if greedy or random.random() > self.eps:
             return np.argmax(action_values.data.numpy())
         else:
             return random.choice(np.arange(self.action_dim))

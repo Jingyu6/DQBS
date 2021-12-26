@@ -8,6 +8,7 @@ from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 ALGO_NAMES = ['BacktrackSarsaDQN', 'DQN', 'MultiBatchDQN', 'BacktrackDQN']
 ENV_NAME = 'CartPole-v0'
 LOG_INTERVAL = 10
+USE_EVAL_REWARDS = False
 
 PARAMS = dict(
     lr=2e-3,
@@ -70,10 +71,10 @@ def main():
                 model.end_episode()
                 running_reward = 0.05 * ep_reward + (1 - 0.05) * running_reward
                 if i_episode % LOG_INTERVAL == 0:
-                    print('Episode {}\tLast reward: {:.2f}\tAverage reward: {:.2f}'.format(
-                    i_episode, ep_reward, running_reward))
-
-                    records[algo_name][seed_idx].append(running_reward)
+                    evaluation_reward = evaluate_model(env, model)
+                    records[algo_name][seed_idx].append(evaluation_reward if USE_EVAL_REWARDS else running_reward)
+                    print('Episode {}\tLast reward: {:.2f}\tAverage reward: {:.2f}\tEvaluation reward: {:.2f}'.format(
+                        i_episode, ep_reward, running_reward, evaluation_reward))
 
     for algo_name in ALGO_NAMES:
         data = np.array(records[algo_name])
@@ -87,6 +88,20 @@ def main():
 
     plt.legend(ALGO_NAMES)
     plt.show()
+
+
+def evaluate_model(env, model, episodes=5, gamma=0.999):
+    total_rewards = 0
+    for _ in range(episodes):
+        state = env.reset()
+        for t in range(MAX_HORIZON):
+            action = model.select_action(state, greedy=True)
+            next_state, reward, done, _ = env.step(action)
+            state = next_state
+            total_rewards += reward * (gamma ** t)
+            if done:
+                break
+    return total_rewards / episodes
 
 if __name__ == '__main__':
     main()
