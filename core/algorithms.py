@@ -124,6 +124,8 @@ class BacktrackSarsaDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
         use_double_dqn=True,
         **kwargs
     ):
@@ -138,8 +140,8 @@ class BacktrackSarsaDQN(DQN):
             eps_start,
             eps_end,
             eps_decay,
-            0.0,
-            0.0,
+            alpha,
+            beta,
             use_double_dqn
         )
 
@@ -177,6 +179,9 @@ class MultiBatchDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
+        use_double_dqn=True,
         **kwargs
     ):
         self.backtrack_steps = backtrack_steps
@@ -190,8 +195,8 @@ class MultiBatchDQN(DQN):
             eps_start,
             eps_end,
             eps_decay,
-            0.0,
-            0.0,
+            alpha,
+            beta,
             False
         )
 
@@ -221,6 +226,8 @@ class BacktrackDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
         use_double_dqn=True,
         **kwargs
     ):
@@ -235,8 +242,8 @@ class BacktrackDQN(DQN):
             eps_start,
             eps_end,
             eps_decay,
-            0.0,
-            0.0,
+            alpha,
+            beta,
             use_double_dqn
         )
 

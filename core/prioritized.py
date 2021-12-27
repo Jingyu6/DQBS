@@ -77,6 +77,7 @@ class PrioritizedExperienceReplayBuffer:
             return *self._get_batch(idxs), idxs, normalized_weights
         else:
             idxs = self.last_idx[start_indices]
+            idxs = np.squeeze(idxs[idxs != -1])
             _, next_actions, _, _, _ = self._get_batch(idxs)
             return *self._get_batch(idxs), next_actions, idxs
 
