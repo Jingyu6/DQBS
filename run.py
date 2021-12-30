@@ -1,34 +1,49 @@
+import os.path
+import argparse
+
 import gym
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
 
 from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--env", "--env", type=str, default='acrobot', choices=['mountaincar', 'cartpole', 'acrobot'])
+parser.add_argument("--lr", "--lr", type=float, default=2e-3)
+parser.add_argument("--gamma", "--gamma", type=float, default=0.99)
+parser.add_argument("--epochs", "--epochs", type=int, default=200)
+parser.add_argument("--buffer_size", "--buffer_size", type=int, default=1e5)
+parser.add_argument("--sample_size", "--sample_size", type=int, default=64)
+parser.add_argument("--eps_start", "--eps_start", type=float, default=0.8)
+parser.add_argument("--eps_end", "--eps_end", type=float, default=0.05)
+parser.add_argument("--eps_decay", "--eps_decay", type=float, default=0.95)
+parser.add_argument("--backtrack_steps", "--backtrack_steps", type=int, default=3)
+parser.add_argument("--use_double_dqn", "-use_double_dqn", action="store_true")
+parser.add_argument("--alpha", "--alpha", type=float, default=0.5)
+parser.add_argument("--beta", "--beta", type=float, default=1e-2)
+args = parser.parse_args()
+
 ALGO_NAMES = ['BacktrackSarsaDQN', 'DQN', 'MultiBatchDQN', 'BacktrackDQN']
-ENV_NAME = 'CartPole-v0'
+
+if args.env == 'mountaincar':
+    ENV_NAME = 'MountainCar-v0'
+elif args.env == 'cartpole':
+    ENV_NAME = 'CartPole-v0'
+else:
+    ENV_NAME = 'Acrobot-v1'
+
+PARAMS = vars(args)
+
 LOG_INTERVAL = 10
-
-PARAMS = dict(
-    lr=2e-3,
-    gamma=0.99,
-    buffer_size=1e5,
-    sample_size=64,
-    eps_start=0.8,
-    eps_end=0.05,
-    eps_decay=0.95,
-    backtrack_steps=3,
-    use_double_dqn=True
-)
-
 MAX_HORIZON = 10000
-NUM_EPOCHS = 200
+NUM_EPOCHS = args.epochs
 SEED_LIST = [227, 222, 1003, 1123]
 
 env = gym.make(ENV_NAME)
 STATE_DIM = env.observation_space.shape[0]
 ACTION_DIM = env.action_space.n
+
 
 def main():
     records = {}
@@ -87,7 +102,10 @@ def main():
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
     plt.legend(ALGO_NAMES)
-    plt.show()
+    out_file = ENV_NAME if args.alpha == 0.0 else ENV_NAME + 'p'
+    plt.savefig(os.path.join('result', out_file + '.png'))
+    # plt.show()
+
 
 if __name__ == '__main__':
     main()

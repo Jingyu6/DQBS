@@ -1,0 +1,1 @@
+Rewards not affected much, observe slight decrease in performance when buffer too small (1e3) and higher variance in result

@@ -17,6 +17,7 @@ class PrioritizedExperienceReplayBuffer:
     def __init__(self, state_size, buffer_size, batch_size, alpha):
         """
         Initialize an ExperienceReplayBuffer object.
+
         Parameters:
         -----------
         :param state_size: dimension of state space
@@ -76,6 +77,7 @@ class PrioritizedExperienceReplayBuffer:
             return *self._get_batch(idxs), idxs, normalized_weights
         else:
             idxs = self.last_idx[start_indices]
+            idxs = np.squeeze(idxs[idxs != -1])
             _, next_actions, _, _, _ = self._get_batch(idxs)
             return *self._get_batch(idxs), next_actions, idxs
 
@@ -85,3 +87,4 @@ class PrioritizedExperienceReplayBuffer:
 
     def __len__(self):
         return self.current_size
+

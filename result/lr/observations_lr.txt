@@ -1,0 +1,2 @@
+smaller learning rate, better performance but run longer
+large learning rate, performance decreases and higher variance towards the end
