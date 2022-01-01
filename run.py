@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--env", "--env", type=str, default='acrobot', choices=['mountaincar', 'cartpole', 'acrobot'])
+parser.add_argument("--env", "--env", type=str, default='cartpole', choices=['mountaincar', 'cartpole', 'acrobot'])
 parser.add_argument("--lr", "--lr", type=float, default=2e-3)
 parser.add_argument("--gamma", "--gamma", type=float, default=0.99)
 parser.add_argument("--epochs", "--epochs", type=int, default=200)
@@ -25,7 +25,8 @@ parser.add_argument("--alpha", "--alpha", type=float, default=0.5)
 parser.add_argument("--beta", "--beta", type=float, default=1e-2)
 args = parser.parse_args()
 
-ALGO_NAMES = ['BacktrackSarsaDQN', 'DQN', 'MultiBatchDQN', 'BacktrackDQN']
+ALGOS = [DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN]
+ALGO_NAMES = [clz.__name__ for clz in ALGOS]
 
 if args.env == 'mountaincar':
     ENV_NAME = 'MountainCar-v0'
@@ -38,6 +39,7 @@ PARAMS = vars(args)
 
 LOG_INTERVAL = 10
 MAX_HORIZON = 10000
+USE_EVAL_REWARDS = True
 NUM_EPOCHS = args.epochs
 SEED_LIST = [227, 222, 1003, 1123]
 
@@ -99,8 +101,6 @@ def main():
     out_file = ENV_NAME if args.alpha == 0.0 else ENV_NAME + 'p'
     plt.savefig(os.path.join('result', out_file + '.png'))
     # plt.show()
-
-
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
     total_rewards = 0
