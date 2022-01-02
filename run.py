@@ -20,7 +20,7 @@ parser.add_argument("--eps_start", "--eps_start", type=float, default=0.8)
 parser.add_argument("--eps_end", "--eps_end", type=float, default=0.05)
 parser.add_argument("--eps_decay", "--eps_decay", type=float, default=0.95)
 parser.add_argument("--backtrack_steps", "--backtrack_steps", type=int, default=3)
-parser.add_argument("--use_double_dqn", "-use_double_dqn", action="store_true")
+parser.add_argument("--use_prioritized_buffer", "--use_prioritized_buffer", action="store_true")
 parser.add_argument("--alpha", "--alpha", type=float, default=0.5)
 parser.add_argument("--beta", "--beta", type=float, default=1e-2)
 args = parser.parse_args()
@@ -36,6 +36,7 @@ else:
     ENV_NAME = 'Acrobot-v1'
 
 PARAMS = vars(args)
+print('Experiment hyperparameters: ', PARAMS)
 
 LOG_INTERVAL = 10
 MAX_HORIZON = 10000
@@ -99,8 +100,8 @@ def main():
 
     plt.legend(ALGO_NAMES)
     out_file = ENV_NAME if args.alpha == 0.0 else ENV_NAME + 'p'
-    plt.savefig(os.path.join('result', out_file + '.png'))
-    # plt.show()
+    # plt.savefig(os.path.join('result', out_file + '.png'))
+    plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
     total_rewards = 0
