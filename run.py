@@ -47,12 +47,11 @@ env = gym.make(ENV_NAME)
 STATE_DIM = env.observation_space.shape[0]
 ACTION_DIM = env.action_space.n
 
-PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
+PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_env={}.svg'.format(
 	PARAMS['use_prioritized_buffer'],
 	PARAMS['lr'],
 	PARAMS['buffer_size'],
 	PARAMS['backtrack_steps'],
-	'(' + str(PARAMS['eps_start']) + '|' + str(PARAMS['eps_end']) + '|' + str(PARAMS['eps_decay']) + ')',
 	PARAMS['env']
 	)
 
@@ -82,7 +81,7 @@ def main():
 			for i_episode in range(NUM_EPOCHS):
 				state = env.reset()
 				ep_reward = 0
-				for t in range(1, MAX_HORIZON + 1):
+				for _ in range(1, MAX_HORIZON + 1):
 					action = model.select_action(state)
 					next_state, reward, done, _ = env.step(action)
 					model.save_transition(state, action, reward, next_state, done)
