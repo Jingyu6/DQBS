@@ -44,7 +44,7 @@ class DQN:
 
         self.use_prioritized_buffer = use_prioritized_buffer
         if self.use_prioritized_buffer:
-            self.memory = PrioritizedExperienceReplayBuffer(state_dim, self.buffer_size, self.sample_size, alpha)
+            self.memory = PrioritizedExperienceReplayBuffer(state_dim, self.buffer_size, self.sample_size, alpha, kwargs.get('backtrack_steps', 0))
             self.beta = beta
             self.cur_beta = 1.0
         else:
@@ -153,8 +153,7 @@ class BacktrackSarsaDQN(DQN):
                 if self.use_prioritized_buffer:
                     states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta)
                     delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
-                    priorities = (delta.abs().detach().numpy().flatten())
-                    self.memory.update_priorities(indices, priorities + 1e-6)
+                    self.memory.update_delta(indices, delta.abs().detach().numpy().flatten() + 1e-6)
                     loss = torch.mean((delta * importance_weights) ** 2)
                 else:
                     states, actions, rewards, next_states, dones, indices = self.memory.sample()
@@ -166,8 +165,7 @@ class BacktrackSarsaDQN(DQN):
                         """ Do not update priorities due to the different scales of q learning and SARSA delta """
                         states, actions, rewards, next_states, _, next_actions, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
                         delta = self._sarsa_loss(states, actions, rewards, next_states, next_actions)
-                        priorities = (delta.abs().detach().numpy().flatten())
-                        self.memory.update_priorities(indices, priorities + 1e-6)
+                        self.memory.update_delta(indices, delta.abs().detach().numpy().flatten() + 1e-6)
                         loss = torch.mean((delta * importance_weights) ** 2)
                     else:
                         """ If there's no SARSA transition, stop updating """

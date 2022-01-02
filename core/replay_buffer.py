@@ -48,7 +48,7 @@ class ExperienceReplayBuffer:
         return self.current_size
 
 class PrioritizedExperienceReplayBuffer:
-    def __init__(self, state_size, buffer_size, batch_size, alpha):
+    def __init__(self, state_size, buffer_size, batch_size, alpha, backtrack_steps=3):
         """
         Initialize an ExperienceReplayBuffer object.
 
@@ -64,6 +64,7 @@ class PrioritizedExperienceReplayBuffer:
         self.last = -1
         self.alpha = alpha
         self.batch_size = batch_size
+        self.backtrack_steps = backtrack_steps
 
         self.states = np.zeros((self.buffer_size, state_size))
         self.actions = np.zeros((self.buffer_size, 1), dtype=np.int64)
@@ -71,6 +72,7 @@ class PrioritizedExperienceReplayBuffer:
         self.rewards = np.zeros((self.buffer_size, 1))
         self.dones = np.zeros((self.buffer_size, 1))
         self.priority = np.zeros(self.buffer_size)
+        self.delta = np.zeros(self.buffer_size)
         self.previous_idx = np.empty(self.buffer_size, dtype=np.int64)
 
     def add(self, state, action, reward, next_state, done):
@@ -150,9 +152,27 @@ class PrioritizedExperienceReplayBuffer:
             _, next_actions, _, _, _ = self._get_batch(start_indices)
             return *self._get_batch(prev_indices), next_actions, prev_indices, importance_weights
 
+    def update_delta(self, indices, deltas):
+        """ Only for backward versions of DQN """
+        self.delta[indices] = deltas
+        self.priority[indices] = deltas
+
+        has_prev = self.previous_idx[indices] != -1
+        previous_indices = self.previous_idx[indices]
+        cur_backtrack_steps = self.backtrack_steps
+
+        while np.sum(has_prev) > 0 and cur_backtrack_steps > 0:
+            self.priority[indices][has_prev] += self.delta[previous_indices][has_prev]
+            has_prev &= self.previous_idx[previous_indices] != -1
+            previous_indices = self.previous_idx[previous_indices]
+            cur_backtrack_steps -= 1
+
     def update_priorities(self, indices, priorities):
         """Update the priorities associated with particular experiences."""
         self.priority[indices] = priorities
 
     def __len__(self):
         return self.current_size
+
+
+
