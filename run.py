@@ -1,13 +1,12 @@
-import os.path
+# coding=utf-8
 import argparse
-
 import gym
-import torch
-import random
-import numpy as np
 import matplotlib.pyplot as plt
-
-from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
+import numpy as np
+import os.path
+import random
+import torch
+from core.algorithms import BacktrackDQN, BacktrackSarsaDQN, DQN, MultiBatchDQN
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--env", "--env", type=str, default='cartpole', choices=['mountaincar', 'cartpole', 'acrobot'])
@@ -29,11 +28,11 @@ ALGOS = [DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN]
 ALGO_NAMES = [clz.__name__ for clz in ALGOS]
 
 if args.env == 'mountaincar':
-    ENV_NAME = 'MountainCar-v0'
+	ENV_NAME = 'MountainCar-v0'
 elif args.env == 'cartpole':
-    ENV_NAME = 'CartPole-v0'
+	ENV_NAME = 'CartPole-v0'
 else:
-    ENV_NAME = 'Acrobot-v1'
+	ENV_NAME = 'Acrobot-v1'
 
 PARAMS = vars(args)
 print('Experiment hyperparameters: ', PARAMS)
@@ -49,80 +48,89 @@ STATE_DIM = env.observation_space.shape[0]
 ACTION_DIM = env.action_space.n
 
 PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
-    PARAMS['use_prioritized_buffer'],
-    PARAMS['lr'],
-    PARAMS['buffer_size'],
-    PARAMS['backtrack_steps'],
-    '(' + str(PARAMS['eps_start']) + '|' + str(PARAMS['eps_end']) + '|' + str(PARAMS['eps_decay']) + ')',
-    PARAMS['env']
-)
+	PARAMS['use_prioritized_buffer'],
+	PARAMS['lr'],
+	PARAMS['buffer_size'],
+	PARAMS['backtrack_steps'],
+	'(' + str(PARAMS['eps_start']) + '|' + str(PARAMS['eps_end']) + '|' + str(PARAMS['eps_decay']) + ')',
+	PARAMS['env']
+	)
+
 
 def set_seed(seed):
-    env.seed(seed)
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
+	env.seed(seed)
+	torch.manual_seed(seed)
+	np.random.seed(seed)
+	random.seed(seed)
+
 
 def main():
-    records = {}
+	records = {}
 
-    for algo, algo_name in zip(ALGOS, ALGO_NAMES):
-        records[algo_name] = [[] for _ in range(len(SEED_LIST))]
+	for algo, algo_name in zip(ALGOS, ALGO_NAMES):
+		records[algo_name] = [[] for _ in range(len(SEED_LIST))]
 
-        for seed_idx, seed in enumerate(SEED_LIST):
-            set_seed(seed)
-            print('Env Name: %s | Seed: %d | STATE_DIM: %d | ACTION_DIM: %d | Algo: %s '
-                  % (ENV_NAME, seed, STATE_DIM, ACTION_DIM, algo_name))
+		for seed_idx, seed in enumerate(SEED_LIST):
+			set_seed(seed)
+			print(
+				'Env Name: %s | Seed: %d | STATE_DIM: %d | ACTION_DIM: %d | Algo: %s '
+				% (ENV_NAME, seed, STATE_DIM, ACTION_DIM, algo_name)
+				)
 
-            model = algo(STATE_DIM, ACTION_DIM, **PARAMS)
-            running_reward = 0
-            for i_episode in range(NUM_EPOCHS):
-                state = env.reset()
-                ep_reward = 0
-                for t in range(1, MAX_HORIZON + 1):
-                    action = model.select_action(state)
-                    next_state, reward, done, _ = env.step(action)
-                    model.save_transition(state, action, reward, next_state, done)
-                    state = next_state
-                    ep_reward += reward
-                    model.update()
-                    if done:
-                        break
+			model = algo(STATE_DIM, ACTION_DIM, **PARAMS)
+			running_reward = 0
+			for i_episode in range(NUM_EPOCHS):
+				state = env.reset()
+				ep_reward = 0
+				for t in range(1, MAX_HORIZON + 1):
+					action = model.select_action(state)
+					next_state, reward, done, _ = env.step(action)
+					model.save_transition(state, action, reward, next_state, done)
+					state = next_state
+					ep_reward += reward
+					model.update()
+					if done:
+						break
 
-                model.end_episode()
-                running_reward = 0.05 * ep_reward + (1 - 0.05) * running_reward
-                if i_episode % LOG_INTERVAL == 0:
-                    evaluation_reward = evaluate_model(env, model)
-                    records[algo_name][seed_idx].append(evaluation_reward if USE_EVAL_REWARDS else running_reward)
-                    print('Episode {}\tLast reward: {:.2f}\tAverage reward: {:.2f}\tEvaluation reward: {:.2f}'.format(
-                        i_episode, ep_reward, running_reward, evaluation_reward))
+				model.end_episode()
+				running_reward = 0.05 * ep_reward + (1 - 0.05) * running_reward
+				if i_episode % LOG_INTERVAL == 0:
+					evaluation_reward = evaluate_model(env, model)
+					records[algo_name][seed_idx].append(evaluation_reward if USE_EVAL_REWARDS else running_reward)
+					print(
+						'Episode {}\tLast reward: {:.2f}\tAverage reward: {:.2f}\tEvaluation reward: {:.2f}'.format(
+							i_episode, ep_reward, running_reward, evaluation_reward
+							)
+						)
 
-    for algo_name in ALGO_NAMES:
-        data = np.array(records[algo_name])
+	for algo_name in ALGO_NAMES:
+		data = np.array(records[algo_name])
 
-        y_mean = np.mean(data, axis=0)
-        y_std = np.std(data, axis=0)
-        x = [int((epoch + 1) * 10) for epoch in range(len(y_mean))]
+		y_mean = np.mean(data, axis=0)
+		y_std = np.std(data, axis=0)
+		x = [int((epoch + 1) * 10) for epoch in range(len(y_mean))]
 
-        plt.plot(x, y_mean)
-        plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
+		plt.plot(x, y_mean)
+		plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
-    plt.legend(ALGO_NAMES)
-    plt.savefig(os.path.join('result', PLOT_NAME))
-    plt.show()
+	plt.legend(ALGO_NAMES)
+	plt.savefig(os.path.join('result', PLOT_NAME))
+	plt.show()
+
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
-    total_rewards = 0
-    for _ in range(episodes):
-        state = env.reset()
-        for t in range(MAX_HORIZON):
-            action = model.select_action(state, greedy=True)
-            next_state, reward, done, _ = env.step(action)
-            state = next_state
-            total_rewards += reward * (gamma ** t)
-            if done:
-                break
-    return total_rewards / episodes
+	total_rewards = 0
+	for _ in range(episodes):
+		state = env.reset()
+		for t in range(MAX_HORIZON):
+			action = model.select_action(state, greedy=True)
+			next_state, reward, done, _ = env.step(action)
+			state = next_state
+			total_rewards += reward * (gamma ** t)
+			if done:
+				break
+	return total_rewards / episodes
+
 
 if __name__ == '__main__':
-    main()
+	main()
