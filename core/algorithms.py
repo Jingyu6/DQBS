@@ -283,15 +283,21 @@ class BacktrackDQN(DQN):
         if self.use_prioritized_buffer:
             self.cur_beta *= np.exp(-self.beta)
 
-        for _ in range(self.backtrack_steps):
+        for i in range(self.backtrack_steps):
             if self.use_prioritized_buffer:
-                states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
+                if i == 0:
+                    states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
+                else:
+                    states, actions, rewards, next_states, dones, _, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
                 delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
                 priorities = (delta.abs().detach().numpy().flatten())
                 self.memory.update_priorities(indices, priorities + 1e-6)
                 loss = torch.mean((delta * importance_weights) ** 2)
             else:
-                states, actions, rewards, next_states, dones, indices = self.memory.sample(starting_indices)
+                if i == 0:
+                    states, actions, rewards, next_states, dones, indices = self.memory.sample(starting_indices)
+                else:
+                    states, actions, rewards, next_states, dones, _, indices = self.memory.sample(starting_indices)
                 delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
                 loss = torch.mean(delta ** 2)
 

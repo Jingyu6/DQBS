@@ -42,11 +42,20 @@ LOG_INTERVAL = 10
 MAX_HORIZON = 10000
 USE_EVAL_REWARDS = True
 NUM_EPOCHS = args.epochs
-SEED_LIST = [227, 222, 1003, 1123]
+SEED_LIST = [227, 222, 1003, 1123, 101]
 
 env = gym.make(ENV_NAME)
 STATE_DIM = env.observation_space.shape[0]
 ACTION_DIM = env.action_space.n
+
+PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
+    PARAMS['use_prioritized_buffer'],
+    PARAMS['lr'],
+    PARAMS['buffer_size'],
+    PARAMS['backtrack_steps'],
+    '(' + str(PARAMS['eps_start']) + '|' + str(PARAMS['eps_end']) + '|' + str(PARAMS['eps_decay']) + ')',
+    PARAMS['env']
+)
 
 def set_seed(seed):
     env.seed(seed)
@@ -93,14 +102,13 @@ def main():
 
         y_mean = np.mean(data, axis=0)
         y_std = np.std(data, axis=0)
-        x = range(len(y_mean))
+        x = [int((epoch + 1) * 10) for epoch in range(len(y_mean))]
 
         plt.plot(x, y_mean)
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
     plt.legend(ALGO_NAMES)
-    out_file = ENV_NAME if args.alpha == 0.0 else ENV_NAME + 'p'
-    # plt.savefig(os.path.join('result', out_file + '.png'))
+    plt.savefig(os.path.join('result', PLOT_NAME))
     plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
