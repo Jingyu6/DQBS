@@ -5,8 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 
 from core.models import FCN
-from core.replay_buffer import ReplayBuffer
-
+from core.replay_buffer import ExperienceReplayBuffer, PrioritizedExperienceReplayBuffer
 
 class DQN:
     def __init__(
@@ -20,6 +19,9 @@ class DQN:
         eps_start=0.8,
         eps_end=0.05,
         eps_decay=0.95,
+        alpha=0.5,
+        beta=1e-2,
+        use_prioritized_buffer=True,
         **kwargs
     ):
         self.gamma = gamma
@@ -40,20 +42,23 @@ class DQN:
         self.eps_decay = eps_decay
         self.eps = self.eps_start
 
-        self.memory = ReplayBuffer(state_dim, self.buffer_size, self.sample_size)
-
-        """ additional arguments """
-        self.use_double_dqn = kwargs.get('use_double_dqn', False)
+        self.use_prioritized_buffer = use_prioritized_buffer
+        if self.use_prioritized_buffer:
+            self.memory = PrioritizedExperienceReplayBuffer(state_dim, self.buffer_size, self.sample_size, alpha, kwargs.get('backtrack_steps', 0))
+            self.beta = beta
+            self.cur_beta = 1.0
+        else:
+            self.memory = ExperienceReplayBuffer(state_dim, self.buffer_size, self.sample_size)
 
     def _update_target_q_func(self):
         self.target_q_func.load_state_dict(self.q_func.state_dict())
 
-    def select_action(self, state):
+    def select_action(self, state, greedy=False):
         state = torch.from_numpy(state).float().unsqueeze(0)        
         with torch.no_grad():
             action_values = self.q_func.forward(state)
 
-        if random.random() > self.eps:
+        if greedy or random.random() > self.eps:
             return np.argmax(action_values.data.numpy())
         else:
             return random.choice(np.arange(self.action_dim))
@@ -66,46 +71,38 @@ class DQN:
         self._update_target_q_func()
 
     def _q_learning_loss(self, states, actions, rewards, next_states, dones):
-        if self.use_double_dqn:
-            return self._double_dqn_loss(states, actions, rewards, next_states, dones)
-
+        """ standard q learning with target network """
         q_targets_next = self.target_q_func.forward(next_states).max(1)[0].unsqueeze(1)
         q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
         q_predict = self.q_func.forward(states).gather(1, actions)
-        loss = F.mse_loss(q_targets, q_predict)
-        
-        return loss
-
-    def _double_dqn_loss(self, states, actions, rewards, next_states, dones):
-        next_q_online = self.q_func.forward(next_states)
-        next_q_targets = self.target_q_func.forward(next_states)
-        greedy_next_actions = torch.argmax(next_q_online, dim=-1, keepdim=True).detach()
-
-        q_targets = rewards + (self.gamma * next_q_targets.gather(1, greedy_next_actions) * (1 - dones))
-        q_predict = self.q_func.forward(states).gather(1, actions)
-        loss = F.mse_loss(q_targets, q_predict)
-
-        return loss
+        return q_targets - q_predict
 
     def _sarsa_loss(self, states, actions, rewards, next_states, next_actions):
         next_q_predict = self.q_func.forward(next_states).gather(1, next_actions).detach()
         sarsa_target = rewards + (self.gamma * next_q_predict)
 
         q_predict = self.q_func.forward(states).gather(1, actions)
-        loss = F.mse_loss(sarsa_target, q_predict)
-        return loss
+        return sarsa_target - q_predict
 
     def update(self):
         if len(self.memory) < self.sample_size:
             return
 
-        states, actions, rewards, next_states, dones, _ = self.memory.sample()
-        loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+        if self.use_prioritized_buffer:
+            self.cur_beta *= np.exp(-self.beta)
+            states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta)
+            delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+            priorities = (delta.abs().detach().numpy().flatten())
+            self.memory.update_priorities(indices, priorities + 1e-6)
+            loss = torch.mean((delta * importance_weights) ** 2)
+        else:
+            states, actions, rewards, next_states, dones, _ = self.memory.sample()
+            delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+            loss = torch.mean(delta ** 2)
 
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-
 
 class BacktrackSarsaDQN(DQN):
     def __init__(
@@ -120,6 +117,9 @@ class BacktrackSarsaDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
+        use_prioritized_buffer=True,
         **kwargs
     ):
         self.backtrack_steps = backtrack_steps
@@ -133,6 +133,9 @@ class BacktrackSarsaDQN(DQN):
             eps_start,
             eps_end,
             eps_decay,
+            alpha,
+            beta,
+            use_prioritized_buffer,
             **kwargs
         )
 
@@ -142,13 +145,35 @@ class BacktrackSarsaDQN(DQN):
 
         starting_indices = None
 
+        if self.use_prioritized_buffer:
+            self.cur_beta *= np.exp(-self.beta)
+
         for i in range(self.backtrack_steps):
             if i == 0:
-                states, actions, rewards, next_states, dones, indices = self.memory.sample()
-                loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                if self.use_prioritized_buffer:
+                    states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta)
+                    delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                    self.memory.update_delta(indices, delta.abs().detach().numpy().flatten() + 1e-6)
+                    loss = torch.mean((delta * importance_weights) ** 2)
+                else:
+                    states, actions, rewards, next_states, dones, indices = self.memory.sample()
+                    delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                    loss = torch.mean(delta ** 2)
             else:
-                states, actions, rewards, next_states, _, next_actions, indices = self.memory.sample(starting_indices)
-                loss = self._sarsa_loss(states, actions, rewards, next_states, next_actions)
+                if self.use_prioritized_buffer:
+                    if self.memory.has_valid_sarsa_transitions():
+                        """ Do not update priorities due to the different scales of q learning and SARSA delta """
+                        states, actions, rewards, next_states, _, next_actions, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
+                        delta = self._sarsa_loss(states, actions, rewards, next_states, next_actions)
+                        self.memory.update_delta(indices, delta.abs().detach().numpy().flatten() + 1e-6)
+                        loss = torch.mean((delta * importance_weights) ** 2)
+                    else:
+                        """ If there's no SARSA transition, stop updating """
+                        return
+                else:
+                    states, actions, rewards, next_states, _, next_actions, indices = self.memory.sample(starting_indices)
+                    delta = self._sarsa_loss(states, actions, rewards, next_states, next_actions)
+                    loss = torch.mean(delta ** 2)
 
             starting_indices = indices
             self.optimizer.zero_grad()
@@ -168,9 +193,12 @@ class MultiBatchDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
+        use_prioritized_buffer=True,
         **kwargs
     ):
-        self.backtrack_steps = 3
+        self.backtrack_steps = backtrack_steps
         super(MultiBatchDQN, self).__init__(
             state_dim,
             action_dim, 
@@ -180,16 +208,32 @@ class MultiBatchDQN(DQN):
             sample_size // self.backtrack_steps,
             eps_start,
             eps_end,
-            eps_decay
+            eps_decay,
+            alpha,
+            beta,
+            use_prioritized_buffer,
+            **kwargs
         )
 
     def update(self):
         if len(self.memory) < (self.sample_size * self.backtrack_steps):
             return
 
+        if self.use_prioritized_buffer:
+            self.cur_beta *= np.exp(-self.beta)
+
         for i in range(self.backtrack_steps):
-            states, actions, rewards, next_states, dones, _ = self.memory.sample()
-            loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+            """ only use standard q learning loss """
+            if self.use_prioritized_buffer:
+                states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta)
+                delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                priorities = (delta.abs().detach().numpy().flatten())
+                self.memory.update_priorities(indices, priorities + 1e-6)
+                loss = torch.mean((delta * importance_weights) ** 2)
+            else:
+                states, actions, rewards, next_states, dones, _ = self.memory.sample()
+                delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                loss = torch.mean(delta ** 2)
 
             self.optimizer.zero_grad()
             loss.backward()
@@ -208,9 +252,12 @@ class BacktrackDQN(DQN):
         eps_end=0.05,
         eps_decay=0.95,
         backtrack_steps=3,
+        alpha=0.5,
+        beta=1e-2,
+        use_prioritized_buffer=True,
         **kwargs
     ):
-        self.backtrack_steps = 3
+        self.backtrack_steps = backtrack_steps
         super(BacktrackDQN, self).__init__(
             state_dim,
             action_dim, 
@@ -221,6 +268,9 @@ class BacktrackDQN(DQN):
             eps_start,
             eps_end,
             eps_decay,
+            alpha,
+            beta,
+            use_prioritized_buffer,
             **kwargs
         )
 
@@ -230,14 +280,31 @@ class BacktrackDQN(DQN):
 
         starting_indices = None
 
+        if self.use_prioritized_buffer:
+            self.cur_beta *= np.exp(-self.beta)
+
         for i in range(self.backtrack_steps):
-            if starting_indices is None:
-                states, actions, rewards, next_states, dones, indices = self.memory.sample(None)
+            if self.use_prioritized_buffer:
+                if i == 0:
+                    states, actions, rewards, next_states, dones, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
+                else:
+                    states, actions, rewards, next_states, dones, _, indices, importance_weights = self.memory.sample(1 - self.cur_beta, starting_indices)
+                delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                priorities = (delta.abs().detach().numpy().flatten())
+                self.memory.update_priorities(indices, priorities + 1e-6)
+                loss = torch.mean((delta * importance_weights) ** 2)
             else:
-                states, actions, rewards, next_states, dones, _, indices = self.memory.sample(starting_indices)
-            loss = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                if i == 0:
+                    states, actions, rewards, next_states, dones, indices = self.memory.sample(starting_indices)
+                else:
+                    states, actions, rewards, next_states, dones, _, indices = self.memory.sample(starting_indices)
+                delta = self._q_learning_loss(states, actions, rewards, next_states, dones)
+                loss = torch.mean(delta ** 2)
 
             starting_indices = indices
             self.optimizer.zero_grad()
             loss.backward()
             self.optimizer.step()  
+
+
+
