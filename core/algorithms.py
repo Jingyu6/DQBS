@@ -104,7 +104,7 @@ class DQN:
         loss.backward()
         self.optimizer.step()
 
-class BacktrackSarsaDQN(DQN):
+class DQBS(DQN):
     def __init__(
         self,
         state_dim, 
@@ -123,7 +123,7 @@ class BacktrackSarsaDQN(DQN):
         **kwargs
     ):
         self.backtrack_steps = backtrack_steps
-        super(BacktrackSarsaDQN, self).__init__(
+        super(DQBS, self).__init__(
             state_dim,
             action_dim, 
             lr,
@@ -239,7 +239,7 @@ class MultiBatchDQN(DQN):
             loss.backward()
             self.optimizer.step()            
 
-class BacktrackDQN(DQN):
+class BackwardDQN(DQN):
     def __init__(
         self,
         state_dim, 
@@ -258,7 +258,7 @@ class BacktrackDQN(DQN):
         **kwargs
     ):
         self.backtrack_steps = backtrack_steps
-        super(BacktrackDQN, self).__init__(
+        super(BackwardDQN, self).__init__(
             state_dim,
             action_dim, 
             lr,

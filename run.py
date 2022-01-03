@@ -1,5 +1,5 @@
+import os
 import time
-import os.path
 import argparse
 
 import gym
@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 from multiprocessing import Pool
 
-from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
+from core.algorithms import DQN, BackwardDQN, MultiBatchDQN, DQBS
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--env", "--env", type=str, default='cartpole', choices=['mountaincar', 'cartpole', 'acrobot'])
@@ -29,7 +29,7 @@ parser.add_argument("--beta", "--beta", type=float, default=1e-2)
 parser.add_argument("--num_workers", "--num_workers", type=int, default=5)
 args = parser.parse_args()
 
-ALGOS = [DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN]
+ALGOS = [DQN, BackwardDQN, MultiBatchDQN, DQBS]
 ALGO_NAMES = [clz.__name__ for clz in ALGOS]
 
 if args.env == 'mountaincar':
@@ -48,7 +48,7 @@ USE_EVAL_REWARDS = True
 USE_RUNNING_AVG = True
 SET_VERBOSE = False
 NUM_EPOCHS = args.epochs
-SEED_LIST = [227, 222, 1003, 1123, 101]
+SEED_LIST = [227, 222, 1003, 1123]
 
 PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
     PARAMS['use_prioritized_buffer'],
@@ -140,7 +140,9 @@ def main():
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
     plt.legend(ALGO_NAMES)
-    plt.savefig(os.path.join('result', PLOT_NAME))
+    if not os.path.isdir('plots'):
+        os.mkdir('plots')
+    plt.savefig(os.path.join('plots', PLOT_NAME))
     # plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
