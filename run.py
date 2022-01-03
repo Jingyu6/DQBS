@@ -134,7 +134,7 @@ def main():
 
         y_mean = np.mean(data, axis=0)
         y_std = np.std(data, axis=0)
-        x = [int((epoch + 1) * 10) for epoch in range(len(y_mean))]
+        x = [int((epoch + 1) * LOG_INTERVAL) for epoch in range(len(y_mean))]
 
         plt.plot(x, y_mean)
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
