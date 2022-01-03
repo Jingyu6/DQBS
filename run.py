@@ -1,3 +1,4 @@
+import time
 import os.path
 import argparse
 
@@ -6,6 +7,8 @@ import torch
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+
+from multiprocessing import Pool
 
 from core.algorithms import DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN
 
@@ -23,6 +26,7 @@ parser.add_argument("--backtrack_steps", "--backtrack_steps", type=int, default=
 parser.add_argument("--use_prioritized_buffer", "--use_prioritized_buffer", action="store_true")
 parser.add_argument("--alpha", "--alpha", type=float, default=0.5)
 parser.add_argument("--beta", "--beta", type=float, default=1e-2)
+parser.add_argument("--num_workers", "--num_workers", type=int, default=5)
 args = parser.parse_args()
 
 ALGOS = [DQN, BacktrackDQN, MultiBatchDQN, BacktrackSarsaDQN]
@@ -36,17 +40,15 @@ else:
     ENV_NAME = 'Acrobot-v1'
 
 PARAMS = vars(args)
-print('Experiment hyperparameters: ', PARAMS)
 
-LOG_INTERVAL = 10
+LOG_INTERVAL = 5
 MAX_HORIZON = 10000
+RUNNING_AVG_WEIGHT = 0.1
 USE_EVAL_REWARDS = True
+USE_RUNNING_AVG = True
+SET_VERBOSE = False
 NUM_EPOCHS = args.epochs
 SEED_LIST = [227, 222, 1003, 1123, 101]
-
-env = gym.make(ENV_NAME)
-STATE_DIM = env.observation_space.shape[0]
-ACTION_DIM = env.action_space.n
 
 PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
     PARAMS['use_prioritized_buffer'],
@@ -57,45 +59,75 @@ PLOT_NAME = 'pri={}_lr={}_buffer={}_bstep={}_eps={}_env={}.svg'.format(
     PARAMS['env']
 )
 
-def set_seed(seed):
+def set_seed(env, seed):
     env.seed(seed)
     torch.manual_seed(seed)
     np.random.seed(seed)
     random.seed(seed)
 
+def worker(seed, algo, algo_name):
+    """ Run experiments for a specific algorithm with PARAMS with seed """
+    print('Algo: {}, seed: {} has starts.'.format(algo_name, seed))
+    st = time.time()
+
+    env = gym.make(ENV_NAME)
+    set_seed(env, seed)
+
+    STATE_DIM = env.observation_space.shape[0]
+    ACTION_DIM = env.action_space.n
+
+    records = []
+    model = algo(STATE_DIM, ACTION_DIM, **PARAMS)
+    training_running_reward = 0
+    eval_running_reward = 0
+
+    for i_episode in range(NUM_EPOCHS):
+        state = env.reset()
+        ep_reward = 0
+        for t in range(1, MAX_HORIZON + 1):
+            action = model.select_action(state)
+            next_state, reward, done, _ = env.step(action)
+            model.save_transition(state, action, reward, next_state, done)
+            state = next_state
+            ep_reward += reward
+            model.update()
+            if done:
+                break
+
+        model.end_episode()
+        training_running_reward = RUNNING_AVG_WEIGHT * ep_reward + (1 - RUNNING_AVG_WEIGHT) * training_running_reward
+        if i_episode % LOG_INTERVAL == 0:
+            evaluation_reward = evaluate_model(env, model)
+            if i_episode == 0:
+                eval_running_reward = evaluation_reward
+            else:
+                eval_running_reward = RUNNING_AVG_WEIGHT * evaluation_reward + (1 - RUNNING_AVG_WEIGHT) * eval_running_reward
+            records.append(eval_running_reward if USE_RUNNING_AVG else evaluation_reward if USE_EVAL_REWARDS else training_running_reward)
+            if SET_VERBOSE:
+                print('Algo: {}, Seed: {}, Episode {}\tLast reward: {:.2f}\tRunning training reward: {:.2f}\tEvaluation reward: {:.2f}\tRunning eval reward: '.format(
+                    algo_name, seed, i_episode, ep_reward, training_running_reward, evaluation_reward, eval_running_reward))
+    
+    et = time.time()
+    print('Algo: {}, seed: {} has finished, elapsed time: {:2.4f}s.'.format(algo_name, seed, et - st))
+    return records
+
 def main():
+    print('Experiment hyperparameters: ', PARAMS)
+
     records = {}
+    arguments = []
 
     for algo, algo_name in zip(ALGOS, ALGO_NAMES):
-        records[algo_name] = [[] for _ in range(len(SEED_LIST))]
+        for seed in SEED_LIST:
+            arguments.append([seed, algo, algo_name])
 
-        for seed_idx, seed in enumerate(SEED_LIST):
-            set_seed(seed)
-            print('Env Name: %s | Seed: %d | STATE_DIM: %d | ACTION_DIM: %d | Algo: %s '
-                  % (ENV_NAME, seed, STATE_DIM, ACTION_DIM, algo_name))
-
-            model = algo(STATE_DIM, ACTION_DIM, **PARAMS)
-            running_reward = 0
-            for i_episode in range(NUM_EPOCHS):
-                state = env.reset()
-                ep_reward = 0
-                for t in range(1, MAX_HORIZON + 1):
-                    action = model.select_action(state)
-                    next_state, reward, done, _ = env.step(action)
-                    model.save_transition(state, action, reward, next_state, done)
-                    state = next_state
-                    ep_reward += reward
-                    model.update()
-                    if done:
-                        break
-
-                model.end_episode()
-                running_reward = 0.05 * ep_reward + (1 - 0.05) * running_reward
-                if i_episode % LOG_INTERVAL == 0:
-                    evaluation_reward = evaluate_model(env, model)
-                    records[algo_name][seed_idx].append(evaluation_reward if USE_EVAL_REWARDS else running_reward)
-                    print('Episode {}\tLast reward: {:.2f}\tAverage reward: {:.2f}\tEvaluation reward: {:.2f}'.format(
-                        i_episode, ep_reward, running_reward, evaluation_reward))
+    with Pool(PARAMS['num_workers']) as p:
+        return_results = p.starmap(worker, arguments)
+        
+    for (_, _, algo_name), record in zip(arguments, return_results):
+        if algo_name not in records:
+            records[algo_name] = []
+        records[algo_name].append(record)
 
     for algo_name in ALGO_NAMES:
         data = np.array(records[algo_name])
@@ -109,7 +141,7 @@ def main():
 
     plt.legend(ALGO_NAMES)
     plt.savefig(os.path.join('result', PLOT_NAME))
-    plt.show()
+    # plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
     total_rewards = 0
