@@ -1,0 +1,371 @@
+Sender: LSF System <lsfadmin@eu-g2-10>
+Subject: Job 198610731: <python run.py --env=cartpole --alpha=0.0 --beta=0.0> in cluster <euler> Done
+
+Job <python run.py --env=cartpole --alpha=0.0 --beta=0.0> was submitted from host <eu-login-38> by user <ouyangy> in cluster <euler> at Mon Dec 27 14:13:25 2021
+Job was executed on host(s) <eu-g2-10>, in queue <gpu.4h>, as user <ouyangy> in cluster <euler> at Mon Dec 27 14:36:44 2021
+</cluster/home/ouyangy> was used as the home directory.
+</cluster/home/ouyangy/dl_2021> was used as the working directory.
+Started at Mon Dec 27 14:36:44 2021
+Terminated at Mon Dec 27 15:03:56 2021
+Results reported at Mon Dec 27 15:03:56 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python run.py --env=cartpole --alpha=0.0 --beta=0.0
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   1625.59 sec.
+    Max Memory :                                 385 MB
+    Average Memory :                             371.07 MB
+    Total Requested Memory :                     1024.00 MB
+    Delta Memory :                               639.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                6
+    Run time :                                   1659 sec.
+    Turnaround time :                            3031 sec.
+
+The output (if any) follows:
+
+Env Name: CartPole-v0 | Seed: 227 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: 38.00	Average reward: 1.90
+Episode 10	Last reward: 14.00	Average reward: 7.96
+Episode 20	Last reward: 47.00	Average reward: 14.07
+Episode 30	Last reward: 68.00	Average reward: 30.51
+Episode 40	Last reward: 142.00	Average reward: 69.98
+Episode 50	Last reward: 199.00	Average reward: 103.83
+Episode 60	Last reward: 200.00	Average reward: 142.16
+Episode 70	Last reward: 191.00	Average reward: 162.96
+Episode 80	Last reward: 165.00	Average reward: 174.23
+Episode 90	Last reward: 155.00	Average reward: 179.25
+Episode 100	Last reward: 192.00	Average reward: 185.83
+Episode 110	Last reward: 200.00	Average reward: 190.41
+Episode 120	Last reward: 200.00	Average reward: 194.26
+Episode 130	Last reward: 200.00	Average reward: 195.34
+Episode 140	Last reward: 198.00	Average reward: 194.76
+Episode 150	Last reward: 200.00	Average reward: 194.38
+Episode 160	Last reward: 200.00	Average reward: 194.03
+Episode 170	Last reward: 200.00	Average reward: 192.27
+Episode 180	Last reward: 200.00	Average reward: 195.37
+Episode 190	Last reward: 200.00	Average reward: 194.03
+Env Name: CartPole-v0 | Seed: 222 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: 15.00	Average reward: 0.75
+Episode 10	Last reward: 14.00	Average reward: 6.41
+Episode 20	Last reward: 11.00	Average reward: 8.95
+Episode 30	Last reward: 71.00	Average reward: 16.56
+Episode 40	Last reward: 63.00	Average reward: 29.88
+Episode 50	Last reward: 168.00	Average reward: 53.33
+Episode 60	Last reward: 185.00	Average reward: 108.10
+Episode 70	Last reward: 200.00	Average reward: 143.76
+Episode 80	Last reward: 154.00	Average reward: 159.54
+Episode 90	Last reward: 166.00	Average reward: 171.66
+Episode 100	Last reward: 200.00	Average reward: 179.76
+Episode 110	Last reward: 185.00	Average reward: 178.97
+Episode 120	Last reward: 200.00	Average reward: 178.40
+Episode 130	Last reward: 200.00	Average reward: 186.39
+Episode 140	Last reward: 200.00	Average reward: 186.94
+Episode 150	Last reward: 166.00	Average reward: 189.65
+Episode 160	Last reward: 200.00	Average reward: 189.92
+Episode 170	Last reward: 200.00	Average reward: 193.97
+Episode 180	Last reward: 200.00	Average reward: 195.45
+Episode 190	Last reward: 190.00	Average reward: 196.78
+Env Name: CartPole-v0 | Seed: 1003 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: 12.00	Average reward: 0.60
+Episode 10	Last reward: 15.00	Average reward: 6.05
+Episode 20	Last reward: 11.00	Average reward: 8.10
+Episode 30	Last reward: 11.00	Average reward: 9.06
+Episode 40	Last reward: 74.00	Average reward: 19.37
+Episode 50	Last reward: 103.00	Average reward: 44.37
+Episode 60	Last reward: 137.00	Average reward: 80.18
+Episode 70	Last reward: 200.00	Average reward: 117.90
+Episode 80	Last reward: 200.00	Average reward: 147.05
+Episode 90	Last reward: 200.00	Average reward: 157.28
+Episode 100	Last reward: 108.00	Average reward: 159.55
+Episode 110	Last reward: 107.00	Average reward: 161.39
+Episode 120	Last reward: 200.00	Average reward: 162.34
+Episode 130	Last reward: 200.00	Average reward: 171.99
+Episode 140	Last reward: 200.00	Average reward: 176.82
+Episode 150	Last reward: 150.00	Average reward: 183.51
+Episode 160	Last reward: 200.00	Average reward: 182.24
+Episode 170	Last reward: 200.00	Average reward: 184.32
+Episode 180	Last reward: 118.00	Average reward: 176.26
+Episode 190	Last reward: 170.00	Average reward: 179.58
+Env Name: CartPole-v0 | Seed: 1123 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: 16.00	Average reward: 0.80
+Episode 10	Last reward: 10.00	Average reward: 6.99
+Episode 20	Last reward: 11.00	Average reward: 8.79
+Episode 30	Last reward: 18.00	Average reward: 10.06
+Episode 40	Last reward: 57.00	Average reward: 34.57
+Episode 50	Last reward: 88.00	Average reward: 48.75
+Episode 60	Last reward: 171.00	Average reward: 83.59
+Episode 70	Last reward: 200.00	Average reward: 130.30
+Episode 80	Last reward: 192.00	Average reward: 149.31
+Episode 90	Last reward: 112.00	Average reward: 162.61
+Episode 100	Last reward: 200.00	Average reward: 167.24
+Episode 110	Last reward: 200.00	Average reward: 175.29
+Episode 120	Last reward: 200.00	Average reward: 182.35
+Episode 130	Last reward: 200.00	Average reward: 188.84
+Episode 140	Last reward: 200.00	Average reward: 193.32
+Episode 150	Last reward: 200.00	Average reward: 195.18
+Episode 160	Last reward: 200.00	Average reward: 196.15
+Episode 170	Last reward: 200.00	Average reward: 197.69
+Episode 180	Last reward: 200.00	Average reward: 198.23
+Episode 190	Last reward: 178.00	Average reward: 188.12
+Env Name: CartPole-v0 | Seed: 227 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: DQN 
+Episode 0	Last reward: 22.00	Average reward: 1.10
+Episode 10	Last reward: 14.00	Average reward: 6.33
+Episode 20	Last reward: 44.00	Average reward: 10.18
+Episode 30	Last reward: 32.00	Average reward: 20.41
+Episode 40	Last reward: 200.00	Average reward: 52.49
+Episode 50	Last reward: 125.00	Average reward: 90.01
+Episode 60	Last reward: 200.00	Average reward: 129.03
+Episode 70	Last reward: 127.00	Average reward: 152.36
+Episode 80	Last reward: 78.00	Average reward: 152.18
+Episode 90	Last reward: 95.00	Average reward: 150.44
+Episode 100	Last reward: 93.00	Average reward: 136.99
+Episode 110	Last reward: 200.00	Average reward: 147.20
+Episode 120	Last reward: 196.00	Average reward: 154.70
+Episode 130	Last reward: 200.00	Average reward: 171.99
+Episode 140	Last reward: 200.00	Average reward: 183.23
+Episode 150	Last reward: 200.00	Average reward: 189.96
+Episode 160	Last reward: 200.00	Average reward: 193.99
+Episode 170	Last reward: 139.00	Average reward: 193.35
+Episode 180	Last reward: 200.00	Average reward: 187.18
+Episode 190	Last reward: 200.00	Average reward: 192.32
+Env Name: CartPole-v0 | Seed: 222 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: DQN 
+Episode 0	Last reward: 35.00	Average reward: 1.75
+Episode 10	Last reward: 50.00	Average reward: 13.78
+Episode 20	Last reward: 113.00	Average reward: 51.49
+Episode 30	Last reward: 200.00	Average reward: 107.67
+Episode 40	Last reward: 200.00	Average reward: 135.47
+Episode 50	Last reward: 154.00	Average reward: 149.64
+Episode 60	Last reward: 200.00	Average reward: 156.11
+Episode 70	Last reward: 200.00	Average reward: 163.73
+Episode 80	Last reward: 178.00	Average reward: 168.26
+Episode 90	Last reward: 153.00	Average reward: 164.18
+Episode 100	Last reward: 177.00	Average reward: 172.40
+Episode 110	Last reward: 200.00	Average reward: 181.53
+Episode 120	Last reward: 176.00	Average reward: 181.55
+Episode 130	Last reward: 200.00	Average reward: 188.02
+Episode 140	Last reward: 200.00	Average reward: 190.87
+Episode 150	Last reward: 160.00	Average reward: 190.00
+Episode 160	Last reward: 200.00	Average reward: 190.70
+Episode 170	Last reward: 200.00	Average reward: 191.72
+Episode 180	Last reward: 200.00	Average reward: 186.98
+Episode 190	Last reward: 200.00	Average reward: 189.50
+Env Name: CartPole-v0 | Seed: 1003 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: DQN 
+Episode 0	Last reward: 18.00	Average reward: 0.90
+Episode 10	Last reward: 17.00	Average reward: 6.28
+Episode 20	Last reward: 150.00	Average reward: 19.19
+Episode 30	Last reward: 200.00	Average reward: 88.55
+Episode 40	Last reward: 200.00	Average reward: 133.27
+Episode 50	Last reward: 200.00	Average reward: 160.05
+Episode 60	Last reward: 200.00	Average reward: 176.08
+Episode 70	Last reward: 200.00	Average reward: 185.68
+Episode 80	Last reward: 200.00	Average reward: 190.69
+Episode 90	Last reward: 200.00	Average reward: 194.42
+Episode 100	Last reward: 163.00	Average reward: 193.91
+Episode 110	Last reward: 200.00	Average reward: 186.01
+Episode 120	Last reward: 200.00	Average reward: 185.13
+Episode 130	Last reward: 145.00	Average reward: 172.43
+Episode 140	Last reward: 158.00	Average reward: 172.15
+Episode 150	Last reward: 200.00	Average reward: 177.39
+Episode 160	Last reward: 118.00	Average reward: 167.76
+Episode 170	Last reward: 124.00	Average reward: 156.33
+Episode 180	Last reward: 123.00	Average reward: 157.95
+Episode 190	Last reward: 200.00	Average reward: 157.92
+Env Name: CartPole-v0 | Seed: 1123 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: DQN 
+Episode 0	Last reward: 10.00	Average reward: 0.50
+Episode 10	Last reward: 14.00	Average reward: 6.38
+Episode 20	Last reward: 16.00	Average reward: 13.42
+Episode 30	Last reward: 17.00	Average reward: 15.29
+Episode 40	Last reward: 200.00	Average reward: 51.62
+Episode 50	Last reward: 200.00	Average reward: 109.29
+Episode 60	Last reward: 200.00	Average reward: 145.26
+Episode 70	Last reward: 168.00	Average reward: 160.40
+Episode 80	Last reward: 148.00	Average reward: 165.52
+Episode 90	Last reward: 157.00	Average reward: 167.77
+Episode 100	Last reward: 173.00	Average reward: 168.21
+Episode 110	Last reward: 200.00	Average reward: 173.21
+Episode 120	Last reward: 200.00	Average reward: 179.46
+Episode 130	Last reward: 200.00	Average reward: 182.57
+Episode 140	Last reward: 200.00	Average reward: 181.96
+Episode 150	Last reward: 200.00	Average reward: 189.20
+Episode 160	Last reward: 200.00	Average reward: 193.53
+Episode 170	Last reward: 200.00	Average reward: 196.13
+Episode 180	Last reward: 159.00	Average reward: 195.63
+Episode 190	Last reward: 200.00	Average reward: 195.28
+Env Name: CartPole-v0 | Seed: 227 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: MultiBatchDQN 
+Episode 0	Last reward: 19.00	Average reward: 0.95
+Episode 10	Last reward: 17.00	Average reward: 6.80
+Episode 20	Last reward: 77.00	Average reward: 22.10
+Episode 30	Last reward: 152.00	Average reward: 77.28
+Episode 40	Last reward: 162.00	Average reward: 124.09
+Episode 50	Last reward: 187.00	Average reward: 151.25
+Episode 60	Last reward: 137.00	Average reward: 148.54
+Episode 70	Last reward: 200.00	Average reward: 151.45
+Episode 80	Last reward: 200.00	Average reward: 169.46
+Episode 90	Last reward: 165.00	Average reward: 172.06
+Episode 100	Last reward: 135.00	Average reward: 153.20
+Episode 110	Last reward: 165.00	Average reward: 146.62
+Episode 120	Last reward: 105.00	Average reward: 132.35
+Episode 130	Last reward: 138.00	Average reward: 128.61
+Episode 140	Last reward: 122.00	Average reward: 127.27
+Episode 150	Last reward: 118.00	Average reward: 123.36
+Episode 160	Last reward: 154.00	Average reward: 126.73
+Episode 170	Last reward: 111.00	Average reward: 125.80
+Episode 180	Last reward: 200.00	Average reward: 131.89
+Episode 190	Last reward: 200.00	Average reward: 156.25
+Env Name: CartPole-v0 | Seed: 222 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: MultiBatchDQN 
+Episode 0	Last reward: 23.00	Average reward: 1.15
+Episode 10	Last reward: 27.00	Average reward: 10.00
+Episode 20	Last reward: 200.00	Average reward: 46.90
+Episode 30	Last reward: 200.00	Average reward: 98.53
+Episode 40	Last reward: 153.00	Average reward: 123.05
+Episode 50	Last reward: 169.00	Average reward: 146.54
+Episode 60	Last reward: 145.00	Average reward: 157.46
+Episode 70	Last reward: 200.00	Average reward: 168.54
+Episode 80	Last reward: 180.00	Average reward: 165.94
+Episode 90	Last reward: 200.00	Average reward: 178.04
+Episode 100	Last reward: 200.00	Average reward: 186.08
+Episode 110	Last reward: 200.00	Average reward: 187.59
+Episode 120	Last reward: 159.00	Average reward: 188.98
+Episode 130	Last reward: 200.00	Average reward: 184.96
+Episode 140	Last reward: 114.00	Average reward: 177.75
+Episode 150	Last reward: 180.00	Average reward: 167.24
+Episode 160	Last reward: 200.00	Average reward: 178.14
+Episode 170	Last reward: 200.00	Average reward: 183.03
+Episode 180	Last reward: 92.00	Average reward: 181.13
+Episode 190	Last reward: 105.00	Average reward: 180.87
+Env Name: CartPole-v0 | Seed: 1003 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: MultiBatchDQN 
+Episode 0	Last reward: 37.00	Average reward: 1.85
+Episode 10	Last reward: 11.00	Average reward: 6.19
+Episode 20	Last reward: 145.00	Average reward: 37.31
+Episode 30	Last reward: 164.00	Average reward: 89.68
+Episode 40	Last reward: 197.00	Average reward: 127.94
+Episode 50	Last reward: 159.00	Average reward: 146.02
+Episode 60	Last reward: 200.00	Average reward: 161.36
+Episode 70	Last reward: 184.00	Average reward: 160.14
+Episode 80	Last reward: 200.00	Average reward: 166.67
+Episode 90	Last reward: 200.00	Average reward: 178.69
+Episode 100	Last reward: 200.00	Average reward: 187.10
+Episode 110	Last reward: 147.00	Average reward: 174.18
+Episode 120	Last reward: 134.00	Average reward: 150.14
+Episode 130	Last reward: 134.00	Average reward: 153.17
+Episode 140	Last reward: 200.00	Average reward: 171.50
+Episode 150	Last reward: 200.00	Average reward: 179.02
+Episode 160	Last reward: 186.00	Average reward: 185.51
+Episode 170	Last reward: 18.00	Average reward: 165.18
+Episode 180	Last reward: 200.00	Average reward: 177.27
+Episode 190	Last reward: 200.00	Average reward: 178.96
+Env Name: CartPole-v0 | Seed: 1123 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: MultiBatchDQN 
+Episode 0	Last reward: 9.00	Average reward: 0.45
+Episode 10	Last reward: 84.00	Average reward: 12.19
+Episode 20	Last reward: 76.00	Average reward: 24.33
+Episode 30	Last reward: 139.00	Average reward: 64.97
+Episode 40	Last reward: 121.00	Average reward: 95.76
+Episode 50	Last reward: 136.00	Average reward: 125.39
+Episode 60	Last reward: 152.00	Average reward: 143.23
+Episode 70	Last reward: 200.00	Average reward: 149.40
+Episode 80	Last reward: 129.00	Average reward: 153.36
+Episode 90	Last reward: 174.00	Average reward: 159.70
+Episode 100	Last reward: 173.00	Average reward: 165.21
+Episode 110	Last reward: 200.00	Average reward: 168.43
+Episode 120	Last reward: 200.00	Average reward: 176.06
+Episode 130	Last reward: 189.00	Average reward: 183.73
+Episode 140	Last reward: 200.00	Average reward: 188.14
+Episode 150	Last reward: 153.00	Average reward: 190.55
+Episode 160	Last reward: 200.00	Average reward: 187.83
+Episode 170	Last reward: 200.00	Average reward: 191.25
+Episode 180	Last reward: 179.00	Average reward: 193.71
+Episode 190	Last reward: 200.00	Average reward: 192.48
+Env Name: CartPole-v0 | Seed: 227 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackDQN 
+Episode 0	Last reward: 26.00	Average reward: 1.30
+Episode 10	Last reward: 32.00	Average reward: 10.11
+Episode 20	Last reward: 198.00	Average reward: 63.58
+Episode 30	Last reward: 200.00	Average reward: 101.56
+Episode 40	Last reward: 200.00	Average reward: 136.69
+Episode 50	Last reward: 183.00	Average reward: 158.72
+Episode 60	Last reward: 188.00	Average reward: 158.76
+Episode 70	Last reward: 200.00	Average reward: 172.74
+Episode 80	Last reward: 137.00	Average reward: 166.53
+Episode 90	Last reward: 200.00	Average reward: 159.25
+Episode 100	Last reward: 155.00	Average reward: 163.06
+Episode 110	Last reward: 178.00	Average reward: 154.89
+Episode 120	Last reward: 200.00	Average reward: 167.77
+Episode 130	Last reward: 50.00	Average reward: 138.86
+Episode 140	Last reward: 125.00	Average reward: 151.01
+Episode 150	Last reward: 106.00	Average reward: 132.42
+Episode 160	Last reward: 200.00	Average reward: 150.70
+Episode 170	Last reward: 200.00	Average reward: 170.48
+Episode 180	Last reward: 200.00	Average reward: 177.64
+Episode 190	Last reward: 200.00	Average reward: 186.61
+Env Name: CartPole-v0 | Seed: 222 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackDQN 
+Episode 0	Last reward: 15.00	Average reward: 0.75
+Episode 10	Last reward: 53.00	Average reward: 9.61
+Episode 20	Last reward: 200.00	Average reward: 46.53
+Episode 30	Last reward: 165.00	Average reward: 97.12
+Episode 40	Last reward: 200.00	Average reward: 128.82
+Episode 50	Last reward: 162.00	Average reward: 148.97
+Episode 60	Last reward: 154.00	Average reward: 153.74
+Episode 70	Last reward: 200.00	Average reward: 168.46
+Episode 80	Last reward: 151.00	Average reward: 170.79
+Episode 90	Last reward: 175.00	Average reward: 161.57
+Episode 100	Last reward: 134.00	Average reward: 158.31
+Episode 110	Last reward: 199.00	Average reward: 161.95
+Episode 120	Last reward: 200.00	Average reward: 163.42
+Episode 130	Last reward: 158.00	Average reward: 161.56
+Episode 140	Last reward: 46.00	Average reward: 153.22
+Episode 150	Last reward: 200.00	Average reward: 155.77
+Episode 160	Last reward: 148.00	Average reward: 162.78
+Episode 170	Last reward: 180.00	Average reward: 161.29
+Episode 180	Last reward: 200.00	Average reward: 174.35
+Episode 190	Last reward: 200.00	Average reward: 171.85
+Env Name: CartPole-v0 | Seed: 1003 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackDQN 
+Episode 0	Last reward: 20.00	Average reward: 1.00
+Episode 10	Last reward: 77.00	Average reward: 18.64
+Episode 20	Last reward: 82.00	Average reward: 45.67
+Episode 30	Last reward: 182.00	Average reward: 89.66
+Episode 40	Last reward: 200.00	Average reward: 126.44
+Episode 50	Last reward: 200.00	Average reward: 155.96
+Episode 60	Last reward: 147.00	Average reward: 163.89
+Episode 70	Last reward: 200.00	Average reward: 169.24
+Episode 80	Last reward: 182.00	Average reward: 175.55
+Episode 90	Last reward: 112.00	Average reward: 160.47
+Episode 100	Last reward: 104.00	Average reward: 140.45
+Episode 110	Last reward: 200.00	Average reward: 138.99
+Episode 120	Last reward: 94.00	Average reward: 130.60
+Episode 130	Last reward: 200.00	Average reward: 140.12
+Episode 140	Last reward: 200.00	Average reward: 161.06
+Episode 150	Last reward: 182.00	Average reward: 156.56
+Episode 160	Last reward: 200.00	Average reward: 173.99
+Episode 170	Last reward: 200.00	Average reward: 178.25
+Episode 180	Last reward: 200.00	Average reward: 184.77
+Episode 190	Last reward: 200.00	Average reward: 189.11
+Env Name: CartPole-v0 | Seed: 1123 | STATE_DIM: 4 | ACTION_DIM: 2 | Algo: BacktrackDQN 
+Episode 0	Last reward: 28.00	Average reward: 1.40
+Episode 10	Last reward: 35.00	Average reward: 8.22
+Episode 20	Last reward: 86.00	Average reward: 24.92
+Episode 30	Last reward: 155.00	Average reward: 61.79
+Episode 40	Last reward: 177.00	Average reward: 98.72
+Episode 50	Last reward: 197.00	Average reward: 131.10
+Episode 60	Last reward: 163.00	Average reward: 151.49
+Episode 70	Last reward: 124.00	Average reward: 157.64
+Episode 80	Last reward: 51.00	Average reward: 127.81
+Episode 90	Last reward: 128.00	Average reward: 134.17
+Episode 100	Last reward: 100.00	Average reward: 140.15
+Episode 110	Last reward: 187.00	Average reward: 138.67
+Episode 120	Last reward: 200.00	Average reward: 151.85
+Episode 130	Last reward: 135.00	Average reward: 160.90
+Episode 140	Last reward: 158.00	Average reward: 166.50
+Episode 150	Last reward: 172.00	Average reward: 167.57
+Episode 160	Last reward: 200.00	Average reward: 171.57
+Episode 170	Last reward: 133.00	Average reward: 164.98
+Episode 180	Last reward: 139.00	Average reward: 157.84
+Episode 190	Last reward: 161.00	Average reward: 147.78

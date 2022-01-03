@@ -1,0 +1,371 @@
+Sender: LSF System <lsfadmin@eu-lo-s4-040>
+Subject: Job 198610735: <python run.py --env=acrobot --alpha=0.0 --beta=0.0> in cluster <euler> Done
+
+Job <python run.py --env=acrobot --alpha=0.0 --beta=0.0> was submitted from host <eu-login-38> by user <ouyangy> in cluster <euler> at Mon Dec 27 14:13:43 2021
+Job was executed on host(s) <eu-lo-s4-040>, in queue <gpu.4h>, as user <ouyangy> in cluster <euler> at Mon Dec 27 14:45:13 2021
+</cluster/home/ouyangy> was used as the home directory.
+</cluster/home/ouyangy/dl_2021> was used as the working directory.
+Started at Mon Dec 27 14:45:13 2021
+Terminated at Mon Dec 27 15:19:51 2021
+Results reported at Mon Dec 27 15:19:51 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+python run.py --env=acrobot --alpha=0.0 --beta=0.0
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   2063.15 sec.
+    Max Memory :                                 379 MB
+    Average Memory :                             361.21 MB
+    Total Requested Memory :                     1024.00 MB
+    Delta Memory :                               645.00 MB
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                6
+    Run time :                                   2094 sec.
+    Turnaround time :                            3968 sec.
+
+The output (if any) follows:
+
+Env Name: Acrobot-v1 | Seed: 227 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -302.00	Average reward: -205.70
+Episode 20	Last reward: -324.00	Average reward: -270.70
+Episode 30	Last reward: -160.00	Average reward: -273.48
+Episode 40	Last reward: -121.00	Average reward: -238.26
+Episode 50	Last reward: -94.00	Average reward: -200.79
+Episode 60	Last reward: -123.00	Average reward: -171.09
+Episode 70	Last reward: -109.00	Average reward: -153.73
+Episode 80	Last reward: -132.00	Average reward: -141.39
+Episode 90	Last reward: -98.00	Average reward: -131.39
+Episode 100	Last reward: -129.00	Average reward: -122.62
+Episode 110	Last reward: -113.00	Average reward: -117.52
+Episode 120	Last reward: -99.00	Average reward: -107.69
+Episode 130	Last reward: -170.00	Average reward: -119.75
+Episode 140	Last reward: -102.00	Average reward: -110.15
+Episode 150	Last reward: -109.00	Average reward: -106.67
+Episode 160	Last reward: -96.00	Average reward: -102.23
+Episode 170	Last reward: -91.00	Average reward: -99.38
+Episode 180	Last reward: -86.00	Average reward: -104.38
+Episode 190	Last reward: -95.00	Average reward: -100.17
+Env Name: Acrobot-v1 | Seed: 222 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -493.00	Average reward: -210.02
+Episode 20	Last reward: -169.00	Average reward: -220.85
+Episode 30	Last reward: -159.00	Average reward: -196.01
+Episode 40	Last reward: -246.00	Average reward: -174.08
+Episode 50	Last reward: -129.00	Average reward: -154.81
+Episode 60	Last reward: -115.00	Average reward: -136.20
+Episode 70	Last reward: -172.00	Average reward: -131.95
+Episode 80	Last reward: -126.00	Average reward: -133.17
+Episode 90	Last reward: -115.00	Average reward: -125.19
+Episode 100	Last reward: -91.00	Average reward: -118.41
+Episode 110	Last reward: -103.00	Average reward: -116.75
+Episode 120	Last reward: -102.00	Average reward: -107.52
+Episode 130	Last reward: -107.00	Average reward: -107.67
+Episode 140	Last reward: -97.00	Average reward: -110.12
+Episode 150	Last reward: -92.00	Average reward: -111.34
+Episode 160	Last reward: -116.00	Average reward: -111.46
+Episode 170	Last reward: -120.00	Average reward: -113.48
+Episode 180	Last reward: -80.00	Average reward: -116.04
+Episode 190	Last reward: -108.00	Average reward: -116.29
+Env Name: Acrobot-v1 | Seed: 1003 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -201.20
+Episode 20	Last reward: -265.00	Average reward: -264.63
+Episode 30	Last reward: -109.00	Average reward: -240.47
+Episode 40	Last reward: -137.00	Average reward: -222.65
+Episode 50	Last reward: -132.00	Average reward: -193.29
+Episode 60	Last reward: -87.00	Average reward: -162.20
+Episode 70	Last reward: -117.00	Average reward: -145.63
+Episode 80	Last reward: -122.00	Average reward: -142.90
+Episode 90	Last reward: -93.00	Average reward: -131.23
+Episode 100	Last reward: -117.00	Average reward: -125.06
+Episode 110	Last reward: -102.00	Average reward: -117.56
+Episode 120	Last reward: -109.00	Average reward: -115.23
+Episode 130	Last reward: -93.00	Average reward: -112.19
+Episode 140	Last reward: -81.00	Average reward: -106.00
+Episode 150	Last reward: -92.00	Average reward: -106.35
+Episode 160	Last reward: -369.00	Average reward: -118.75
+Episode 170	Last reward: -116.00	Average reward: -115.27
+Episode 180	Last reward: -87.00	Average reward: -108.83
+Episode 190	Last reward: -131.00	Average reward: -112.91
+Env Name: Acrobot-v1 | Seed: 1123 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackSarsaDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -196.30
+Episode 20	Last reward: -185.00	Average reward: -253.37
+Episode 30	Last reward: -160.00	Average reward: -236.60
+Episode 40	Last reward: -94.00	Average reward: -205.36
+Episode 50	Last reward: -128.00	Average reward: -179.64
+Episode 60	Last reward: -111.00	Average reward: -176.27
+Episode 70	Last reward: -219.00	Average reward: -187.14
+Episode 80	Last reward: -145.00	Average reward: -159.99
+Episode 90	Last reward: -115.00	Average reward: -145.39
+Episode 100	Last reward: -145.00	Average reward: -134.29
+Episode 110	Last reward: -99.00	Average reward: -126.51
+Episode 120	Last reward: -114.00	Average reward: -122.16
+Episode 130	Last reward: -119.00	Average reward: -119.62
+Episode 140	Last reward: -135.00	Average reward: -121.16
+Episode 150	Last reward: -129.00	Average reward: -119.20
+Episode 160	Last reward: -135.00	Average reward: -120.90
+Episode 170	Last reward: -127.00	Average reward: -114.11
+Episode 180	Last reward: -115.00	Average reward: -117.18
+Episode 190	Last reward: -87.00	Average reward: -110.73
+Env Name: Acrobot-v1 | Seed: 227 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: DQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -348.00	Average reward: -189.43
+Episode 20	Last reward: -221.00	Average reward: -245.75
+Episode 30	Last reward: -190.00	Average reward: -264.04
+Episode 40	Last reward: -204.00	Average reward: -230.24
+Episode 50	Last reward: -88.00	Average reward: -201.47
+Episode 60	Last reward: -81.00	Average reward: -169.42
+Episode 70	Last reward: -117.00	Average reward: -147.44
+Episode 80	Last reward: -97.00	Average reward: -133.53
+Episode 90	Last reward: -70.00	Average reward: -121.93
+Episode 100	Last reward: -118.00	Average reward: -112.68
+Episode 110	Last reward: -74.00	Average reward: -104.14
+Episode 120	Last reward: -92.00	Average reward: -96.27
+Episode 130	Last reward: -74.00	Average reward: -92.46
+Episode 140	Last reward: -90.00	Average reward: -92.43
+Episode 150	Last reward: -77.00	Average reward: -92.06
+Episode 160	Last reward: -94.00	Average reward: -90.23
+Episode 170	Last reward: -77.00	Average reward: -89.57
+Episode 180	Last reward: -77.00	Average reward: -87.49
+Episode 190	Last reward: -95.00	Average reward: -88.62
+Env Name: Acrobot-v1 | Seed: 222 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: DQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -245.00	Average reward: -166.29
+Episode 20	Last reward: -209.00	Average reward: -193.42
+Episode 30	Last reward: -151.00	Average reward: -173.11
+Episode 40	Last reward: -109.00	Average reward: -154.25
+Episode 50	Last reward: -84.00	Average reward: -136.53
+Episode 60	Last reward: -112.00	Average reward: -132.23
+Episode 70	Last reward: -172.00	Average reward: -124.97
+Episode 80	Last reward: -84.00	Average reward: -112.15
+Episode 90	Last reward: -104.00	Average reward: -110.88
+Episode 100	Last reward: -137.00	Average reward: -106.06
+Episode 110	Last reward: -117.00	Average reward: -103.53
+Episode 120	Last reward: -101.00	Average reward: -103.20
+Episode 130	Last reward: -107.00	Average reward: -102.58
+Episode 140	Last reward: -123.00	Average reward: -131.55
+Episode 150	Last reward: -129.00	Average reward: -136.09
+Episode 160	Last reward: -120.00	Average reward: -117.85
+Episode 170	Last reward: -87.00	Average reward: -104.32
+Episode 180	Last reward: -108.00	Average reward: -97.82
+Episode 190	Last reward: -67.00	Average reward: -93.31
+Env Name: Acrobot-v1 | Seed: 1003 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: DQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -215.33
+Episode 20	Last reward: -500.00	Average reward: -329.56
+Episode 30	Last reward: -500.00	Average reward: -391.25
+Episode 40	Last reward: -500.00	Average reward: -364.80
+Episode 50	Last reward: -356.00	Average reward: -318.37
+Episode 60	Last reward: -164.00	Average reward: -259.52
+Episode 70	Last reward: -126.00	Average reward: -217.53
+Episode 80	Last reward: -171.00	Average reward: -191.56
+Episode 90	Last reward: -103.00	Average reward: -164.19
+Episode 100	Last reward: -100.00	Average reward: -140.66
+Episode 110	Last reward: -87.00	Average reward: -129.51
+Episode 120	Last reward: -129.00	Average reward: -120.49
+Episode 130	Last reward: -78.00	Average reward: -113.53
+Episode 140	Last reward: -129.00	Average reward: -118.77
+Episode 150	Last reward: -111.00	Average reward: -109.86
+Episode 160	Last reward: -78.00	Average reward: -105.22
+Episode 170	Last reward: -77.00	Average reward: -98.24
+Episode 180	Last reward: -85.00	Average reward: -97.97
+Episode 190	Last reward: -81.00	Average reward: -93.09
+Env Name: Acrobot-v1 | Seed: 1123 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: DQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -392.00	Average reward: -197.18
+Episode 20	Last reward: -396.00	Average reward: -269.78
+Episode 30	Last reward: -232.00	Average reward: -259.20
+Episode 40	Last reward: -129.00	Average reward: -228.50
+Episode 50	Last reward: -222.00	Average reward: -196.99
+Episode 60	Last reward: -161.00	Average reward: -170.73
+Episode 70	Last reward: -172.00	Average reward: -175.99
+Episode 80	Last reward: -89.00	Average reward: -171.16
+Episode 90	Last reward: -112.00	Average reward: -150.70
+Episode 100	Last reward: -174.00	Average reward: -145.62
+Episode 110	Last reward: -136.00	Average reward: -127.79
+Episode 120	Last reward: -117.00	Average reward: -120.54
+Episode 130	Last reward: -92.00	Average reward: -125.30
+Episode 140	Last reward: -93.00	Average reward: -119.75
+Episode 150	Last reward: -119.00	Average reward: -112.84
+Episode 160	Last reward: -92.00	Average reward: -101.06
+Episode 170	Last reward: -114.00	Average reward: -101.23
+Episode 180	Last reward: -95.00	Average reward: -101.81
+Episode 190	Last reward: -70.00	Average reward: -94.95
+Env Name: Acrobot-v1 | Seed: 227 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: MultiBatchDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -215.60
+Episode 20	Last reward: -389.00	Average reward: -312.35
+Episode 30	Last reward: -246.00	Average reward: -307.71
+Episode 40	Last reward: -278.00	Average reward: -258.06
+Episode 50	Last reward: -142.00	Average reward: -216.46
+Episode 60	Last reward: -139.00	Average reward: -179.18
+Episode 70	Last reward: -93.00	Average reward: -146.80
+Episode 80	Last reward: -114.00	Average reward: -129.71
+Episode 90	Last reward: -118.00	Average reward: -118.17
+Episode 100	Last reward: -138.00	Average reward: -111.75
+Episode 110	Last reward: -109.00	Average reward: -117.68
+Episode 120	Last reward: -89.00	Average reward: -112.22
+Episode 130	Last reward: -96.00	Average reward: -105.10
+Episode 140	Last reward: -84.00	Average reward: -101.91
+Episode 150	Last reward: -108.00	Average reward: -96.89
+Episode 160	Last reward: -91.00	Average reward: -98.26
+Episode 170	Last reward: -81.00	Average reward: -96.95
+Episode 180	Last reward: -90.00	Average reward: -104.73
+Episode 190	Last reward: -90.00	Average reward: -103.82
+Env Name: Acrobot-v1 | Seed: 222 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: MultiBatchDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -213.08
+Episode 20	Last reward: -409.00	Average reward: -247.10
+Episode 30	Last reward: -254.00	Average reward: -255.35
+Episode 40	Last reward: -235.00	Average reward: -228.07
+Episode 50	Last reward: -324.00	Average reward: -199.93
+Episode 60	Last reward: -89.00	Average reward: -163.04
+Episode 70	Last reward: -64.00	Average reward: -140.40
+Episode 80	Last reward: -93.00	Average reward: -128.02
+Episode 90	Last reward: -351.00	Average reward: -128.89
+Episode 100	Last reward: -136.00	Average reward: -124.15
+Episode 110	Last reward: -83.00	Average reward: -115.93
+Episode 120	Last reward: -93.00	Average reward: -108.13
+Episode 130	Last reward: -118.00	Average reward: -103.07
+Episode 140	Last reward: -84.00	Average reward: -99.21
+Episode 150	Last reward: -112.00	Average reward: -101.48
+Episode 160	Last reward: -79.00	Average reward: -99.29
+Episode 170	Last reward: -85.00	Average reward: -99.37
+Episode 180	Last reward: -175.00	Average reward: -100.64
+Episode 190	Last reward: -105.00	Average reward: -96.20
+Env Name: Acrobot-v1 | Seed: 1003 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: MultiBatchDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -316.00	Average reward: -184.68
+Episode 20	Last reward: -213.00	Average reward: -213.25
+Episode 30	Last reward: -138.00	Average reward: -200.25
+Episode 40	Last reward: -99.00	Average reward: -175.22
+Episode 50	Last reward: -99.00	Average reward: -151.28
+Episode 60	Last reward: -87.00	Average reward: -135.83
+Episode 70	Last reward: -122.00	Average reward: -125.65
+Episode 80	Last reward: -115.00	Average reward: -119.28
+Episode 90	Last reward: -82.00	Average reward: -114.43
+Episode 100	Last reward: -84.00	Average reward: -104.06
+Episode 110	Last reward: -79.00	Average reward: -96.57
+Episode 120	Last reward: -94.00	Average reward: -95.64
+Episode 130	Last reward: -92.00	Average reward: -91.32
+Episode 140	Last reward: -91.00	Average reward: -88.93
+Episode 150	Last reward: -106.00	Average reward: -89.81
+Episode 160	Last reward: -86.00	Average reward: -87.20
+Episode 170	Last reward: -100.00	Average reward: -88.63
+Episode 180	Last reward: -84.00	Average reward: -86.89
+Episode 190	Last reward: -88.00	Average reward: -88.71
+Env Name: Acrobot-v1 | Seed: 1123 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: MultiBatchDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -215.60
+Episode 20	Last reward: -276.00	Average reward: -278.54
+Episode 30	Last reward: -173.00	Average reward: -248.49
+Episode 40	Last reward: -204.00	Average reward: -229.51
+Episode 50	Last reward: -90.00	Average reward: -201.81
+Episode 60	Last reward: -126.00	Average reward: -187.27
+Episode 70	Last reward: -79.00	Average reward: -152.26
+Episode 80	Last reward: -111.00	Average reward: -134.57
+Episode 90	Last reward: -75.00	Average reward: -120.88
+Episode 100	Last reward: -98.00	Average reward: -112.29
+Episode 110	Last reward: -85.00	Average reward: -110.15
+Episode 120	Last reward: -91.00	Average reward: -105.11
+Episode 130	Last reward: -90.00	Average reward: -103.50
+Episode 140	Last reward: -77.00	Average reward: -99.64
+Episode 150	Last reward: -111.00	Average reward: -104.21
+Episode 160	Last reward: -82.00	Average reward: -99.83
+Episode 170	Last reward: -80.00	Average reward: -101.44
+Episode 180	Last reward: -95.00	Average reward: -97.91
+Episode 190	Last reward: -77.00	Average reward: -92.91
+Env Name: Acrobot-v1 | Seed: 227 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -211.00
+Episode 20	Last reward: -500.00	Average reward: -303.73
+Episode 30	Last reward: -149.00	Average reward: -297.39
+Episode 40	Last reward: -120.00	Average reward: -245.96
+Episode 50	Last reward: -104.00	Average reward: -205.37
+Episode 60	Last reward: -176.00	Average reward: -174.99
+Episode 70	Last reward: -143.00	Average reward: -164.91
+Episode 80	Last reward: -130.00	Average reward: -152.81
+Episode 90	Last reward: -80.00	Average reward: -139.13
+Episode 100	Last reward: -111.00	Average reward: -122.82
+Episode 110	Last reward: -94.00	Average reward: -112.27
+Episode 120	Last reward: -145.00	Average reward: -108.71
+Episode 130	Last reward: -84.00	Average reward: -106.19
+Episode 140	Last reward: -71.00	Average reward: -99.16
+Episode 150	Last reward: -129.00	Average reward: -98.36
+Episode 160	Last reward: -92.00	Average reward: -100.01
+Episode 170	Last reward: -85.00	Average reward: -96.37
+Episode 180	Last reward: -106.00	Average reward: -96.48
+Episode 190	Last reward: -111.00	Average reward: -103.13
+Env Name: Acrobot-v1 | Seed: 222 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -500.00	Average reward: -211.72
+Episode 20	Last reward: -261.00	Average reward: -260.19
+Episode 30	Last reward: -246.00	Average reward: -247.93
+Episode 40	Last reward: -117.00	Average reward: -214.56
+Episode 50	Last reward: -190.00	Average reward: -186.05
+Episode 60	Last reward: -240.00	Average reward: -173.88
+Episode 70	Last reward: -104.00	Average reward: -161.29
+Episode 80	Last reward: -121.00	Average reward: -145.91
+Episode 90	Last reward: -120.00	Average reward: -132.29
+Episode 100	Last reward: -84.00	Average reward: -131.28
+Episode 110	Last reward: -157.00	Average reward: -119.76
+Episode 120	Last reward: -93.00	Average reward: -106.80
+Episode 130	Last reward: -76.00	Average reward: -103.45
+Episode 140	Last reward: -109.00	Average reward: -101.10
+Episode 150	Last reward: -105.00	Average reward: -101.11
+Episode 160	Last reward: -97.00	Average reward: -99.44
+Episode 170	Last reward: -111.00	Average reward: -98.47
+Episode 180	Last reward: -99.00	Average reward: -94.80
+Episode 190	Last reward: -84.00	Average reward: -98.49
+Env Name: Acrobot-v1 | Seed: 1003 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackDQN 
+Episode 0	Last reward: -500.00	Average reward: -25.00
+Episode 10	Last reward: -210.00	Average reward: -174.59
+Episode 20	Last reward: -148.00	Average reward: -209.30
+Episode 30	Last reward: -187.00	Average reward: -212.11
+Episode 40	Last reward: -215.00	Average reward: -219.46
+Episode 50	Last reward: -120.00	Average reward: -202.81
+Episode 60	Last reward: -171.00	Average reward: -177.67
+Episode 70	Last reward: -81.00	Average reward: -160.15
+Episode 80	Last reward: -93.00	Average reward: -146.22
+Episode 90	Last reward: -78.00	Average reward: -130.99
+Episode 100	Last reward: -106.00	Average reward: -122.36
+Episode 110	Last reward: -86.00	Average reward: -112.42
+Episode 120	Last reward: -103.00	Average reward: -108.28
+Episode 130	Last reward: -122.00	Average reward: -103.74
+Episode 140	Last reward: -130.00	Average reward: -103.01
+Episode 150	Last reward: -85.00	Average reward: -96.73
+Episode 160	Last reward: -86.00	Average reward: -96.22
+Episode 170	Last reward: -88.00	Average reward: -98.75
+Episode 180	Last reward: -65.00	Average reward: -94.45
+Episode 190	Last reward: -111.00	Average reward: -97.99
+Env Name: Acrobot-v1 | Seed: 1123 | STATE_DIM: 6 | ACTION_DIM: 3 | Algo: BacktrackDQN 
+Episode 0	Last reward: -451.00	Average reward: -22.55
+Episode 10	Last reward: -500.00	Average reward: -214.13
+Episode 20	Last reward: -377.00	Average reward: -301.69
+Episode 30	Last reward: -370.00	Average reward: -301.43
+Episode 40	Last reward: -143.00	Average reward: -266.73
+Episode 50	Last reward: -226.00	Average reward: -224.91
+Episode 60	Last reward: -174.00	Average reward: -193.19
+Episode 70	Last reward: -146.00	Average reward: -180.79
+Episode 80	Last reward: -77.00	Average reward: -154.35
+Episode 90	Last reward: -99.00	Average reward: -136.77
+Episode 100	Last reward: -86.00	Average reward: -126.61
+Episode 110	Last reward: -119.00	Average reward: -112.62
+Episode 120	Last reward: -94.00	Average reward: -104.37
+Episode 130	Last reward: -108.00	Average reward: -105.21
+Episode 140	Last reward: -79.00	Average reward: -99.00
+Episode 150	Last reward: -88.00	Average reward: -96.97
+Episode 160	Last reward: -69.00	Average reward: -101.10
+Episode 170	Last reward: -113.00	Average reward: -96.36
+Episode 180	Last reward: -100.00	Average reward: -94.52
+Episode 190	Last reward: -94.00	Average reward: -92.27
