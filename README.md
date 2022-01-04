@@ -33,6 +33,11 @@ Deep Q-Network (DQN) with Experience Replay (ER) mechanism is the first algorith
 ```
 
 ### How to Run Experiments:
+Set up environment for the first time:
+```
+pip install -r requirements.txt
+```
+
 To run experiments, go to the root directory and type (the default parameter can be used for result reproduction):
 ```
 python run.py
