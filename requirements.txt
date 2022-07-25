@@ -1,5 +1,5 @@
 ale_py==0.7.3
 gym==0.21.0
 matplotlib==3.4.3
-numpy==1.21.2
+numpy==1.22.0
 torch==1.10.0
