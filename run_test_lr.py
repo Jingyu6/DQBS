@@ -140,13 +140,12 @@ def main():
         y_std = np.std(data, axis=0)
         x = [int((epoch + 1) * LOG_INTERVAL) for epoch in range(len(y_mean))]
 
+        plt.ylim([0,200])
         plt.plot(x, y_mean)
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
-    plt.ylabel('Average Reward')
-    plt.xlabel('Epoch')
-    plt.legend(LEARNING_RATES_LABELS, loc='lower right')
-    plt.savefig(os.path.join('result/lr200', PLOT_NAME))
+    plt.legend(LEARNING_RATES_LABELS, loc='upper left')
+    plt.savefig(os.path.join('result/lr', PLOT_NAME))
     #plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):

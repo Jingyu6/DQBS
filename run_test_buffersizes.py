@@ -51,8 +51,8 @@ USE_RUNNING_AVG = True
 SET_VERBOSE = False
 NUM_EPOCHS = args.epochs
 SEED_LIST = [227, 222, 1003, 1123]#, 101]
-BUFFER_SIZES = [10**2,10**3,10**4]#,10**6]#, 10**7]
-BUFFER_LABELS = ["buffersize = 10^3","buffersize = 10^4","buffersize = 10^5"]#,"buffersize = 10^6"]#, "buffersize = 10^7"]
+BUFFER_SIZES = [10**2,10**3,10**4, 10**5]#,10**6]#, 10**7]
+BUFFER_LABELS = ["buffersize = 10^2","buffersize = 10^3","buffersize = 10^4", "buffersize = 10^5"]#,"buffersize = 10^6"]#, "buffersize = 10^7"]
 
 PLOT_NAME = 'pri={}_lr={}_buffer=na_bstep={}_eps={}_env={}.svg'.format(
     PARAMS['use_prioritized_buffer'],
@@ -143,10 +143,8 @@ def main():
         plt.plot(x, y_mean)
         plt.fill_between(x, y_mean - y_std, y_mean + y_std, interpolate=True, alpha=0.3)
 
-    #plt.ylabel('Average Reward')
-    #plt.xlabel('Epoch')
-    plt.legend(BUFFER_LABELS, loc='lower right')
-    plt.savefig(os.path.join('result/buffersizes200', PLOT_NAME))
+    plt.legend(BUFFER_LABELS, loc='upper left')
+    plt.savefig(os.path.join('result/buffersizes', PLOT_NAME))
     #plt.show()
 
 def evaluate_model(env, model, episodes=5, gamma=0.999):
